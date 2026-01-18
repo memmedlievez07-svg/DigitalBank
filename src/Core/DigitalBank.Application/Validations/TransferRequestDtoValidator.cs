@@ -12,7 +12,7 @@ namespace DigitalBank.Application.Validations
     {
         public TransferRequestDtoValidator()
         {
-            RuleFor(x => x.ReceiverWalletId)
+            RuleFor(x => x.ReceiverCardNumber)
                 .GreaterThan(0);
 
             RuleFor(x => x.Amount)

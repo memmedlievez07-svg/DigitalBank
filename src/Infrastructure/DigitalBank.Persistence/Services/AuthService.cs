@@ -2,44 +2,49 @@
 using DigitalBank.Application.Interfaces;
 using DigitalBank.Application.Options;
 using DigitalBank.Application.Results;
+using DigitalBank.Application.UnitOfWork;
 using DigitalBank.Domain.Entities;
 using DigitalBank.Domain.Entities.Identity;
 using DigitalBank.Domain.Enums;
-using DigitalBank.Persistence.Dal;
-using DigitalBank.Persistence.Services.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
-using System.Text;
 
-namespace DigitalBank.Persistence.Services.Auth
+namespace DigitalBank.Persistence.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly DigitalBankDbContext _db;
+        private readonly IUnitOfWork _uow;
+
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IAuditLogService _audit;
         private readonly IEmailSender _emailSender;
-
+        ILogger<AuthService> _logger;
         private readonly JwtOption _jwt;
         private readonly IConfiguration _config;
+        private readonly IWalletCodeGenerator _walletCodeGenerator;
 
         public AuthService(
-            DigitalBankDbContext db,
+            IUnitOfWork uow,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             IJwtTokenService jwtTokenService,
             IAuditLogService audit,
             IEmailSender emailSender,
             IOptions<JwtOption> jwtOptions,
-            IConfiguration config)
+            IConfiguration config,
+            IWalletCodeGenerator walletCodeGenerator,
+             ILogger<AuthService> logger
+            )
         {
-            _db = db;
+            _uow = uow;
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtTokenService = jwtTokenService;
@@ -47,8 +52,94 @@ namespace DigitalBank.Persistence.Services.Auth
             _emailSender = emailSender;
             _jwt = jwtOptions.Value;
             _config = config;
+            _walletCodeGenerator = walletCodeGenerator;
+            _logger = logger;
         }
 
+        //public async Task<ServiceResultVoid> RegisterAsync(RegisterRequestDto dto)
+        //{
+        //    // 1) Check email exists
+        //    var existing = await _userManager.FindByEmailAsync(dto.Email);
+        //    if (existing != null)
+        //    {
+        //        await _audit.WriteAsync(AuditActionType.Register, false, "Email already exists",
+        //            detailsJson: $"{{\"email\":\"{dto.Email}\"}}");
+        //        return ServiceResultVoid.Fail("Email artıq mövcuddur", 400);
+        //    }
+
+        //    // 2) Create user (Identity)
+        //    var user = new AppUser
+        //    {
+        //        Email = dto.Email,
+        //        UserName = dto.Email,
+        //        FirstName = dto.FirstName,
+        //        LastName = dto.LastName,
+        //        FatherName = dto.FatherName,
+        //        Address = dto.Address,
+        //        Age = dto.Age,
+        //        EmailConfirmed = false,
+        //        CreatedDate = DateTime.UtcNow
+        //    };
+
+        //    var createRes = await _userManager.CreateAsync(user, dto.Password);
+        //    if (!createRes.Succeeded)
+        //    {
+        //        var errs = createRes.Errors.Select(e => e.Description).ToList();
+        //        await _audit.WriteAsync(AuditActionType.Register, false, "Register failed",
+        //            detailsJson: $"{{\"email\":\"{dto.Email}\",\"errors\":\"{string.Join(" | ", errs)}\"}}");
+        //        return ServiceResultVoid.Fail(errs, "Register failed", 400);
+        //    }
+
+        //    // 3) Auto-create wallet (repo + uow)
+        //    var cardNumber = await _walletCodeGenerator.GenerateUniqueCardNumberAsync();
+
+        //    var wallet = new Wallet
+        //    {
+        //        UserId = user.Id,
+        //        Balance = 0m,
+        //        Currency = "AZN",
+        //        Status = WalletStatus.Active,
+        //        CardNumber = cardNumber
+        //    };
+
+        //    await _uow.WalletWriteRepository.AddAsync(wallet);
+        //    await _uow.CommitAsync();
+
+        //    // 4) Assign default role
+        //    await _userManager.AddToRoleAsync(user, "User");
+
+        //    // 5) Generate confirmation token + link
+        //    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        //    var encodedToken = Uri.EscapeDataString(token);
+
+        //    var apiBaseUrl = _config["ApiBaseUrl"]?.TrimEnd('/');
+        //    if (string.IsNullOrWhiteSpace(apiBaseUrl))
+        //    {
+        //        await _audit.WriteAsync(AuditActionType.Register, true, "Register success but ApiBaseUrl missing",
+        //            detailsJson: $"{{\"email\":\"{dto.Email}\",\"cardNumber\":\"{cardNumber}\"}}",
+        //            overrideUserId: user.Id);
+
+        //        return ServiceResultVoid.Ok("Qeydiyyat uğurludur. Email təsdiqi üçün link konfiqurasiya olunmayıb.");
+        //    }
+
+        //    var confirmLink = $"{apiBaseUrl}/api/client/auth/confirm-email?userId={user.Id}&token={encodedToken}";
+
+        //    // 6) Send emailc
+
+        //    var subject = "DigitalBank — Email təsdiqi";
+        //    var html = EmailTemplates.ConfirmEmail(
+        //        displayName: user.FirstName ?? user.UserName ?? "Hörmətli müştəri",
+        //        confirmLink: confirmLink);
+
+        //    await _emailSender.SendAsync(user.Email!, subject, html);
+
+        //    // 7) Audit
+        //    await _audit.WriteAsync(AuditActionType.Register, true, "Register success",
+        //        detailsJson: $"{{\"email\":\"{dto.Email}\",\"cardNumber\":\"{cardNumber}\"}}",
+        //        overrideUserId: user.Id);
+
+        //    return ServiceResultVoid.Ok("Qeydiyyat uğurludur. Email-ə təsdiq linki göndərildi.");
+        //}
         public async Task<ServiceResultVoid> RegisterAsync(RegisterRequestDto dto)
         {
             // 1) Check email exists
@@ -60,7 +151,7 @@ namespace DigitalBank.Persistence.Services.Auth
                 return ServiceResultVoid.Fail("Email artıq mövcuddur", 400);
             }
 
-            // 2) Create user
+            // 2) Create user (Identity)
             var user = new AppUser
             {
                 Email = dto.Email,
@@ -70,7 +161,8 @@ namespace DigitalBank.Persistence.Services.Auth
                 FatherName = dto.FatherName,
                 Address = dto.Address,
                 Age = dto.Age,
-                EmailConfirmed = false
+                EmailConfirmed = false,
+                CreatedDate = DateTime.UtcNow
             };
 
             var createRes = await _userManager.CreateAsync(user, dto.Password);
@@ -82,21 +174,33 @@ namespace DigitalBank.Persistence.Services.Auth
                 return ServiceResultVoid.Fail(errs, "Register failed", 400);
             }
 
-            // 3) Assign default role
-            // (Rol seed olunubsa problemsizdir)
+            // 3) Auto-create wallet
+            var cardNumber = await _walletCodeGenerator.GenerateUniqueCardNumberAsync();
+
+            var wallet = new Wallet
+            {
+                UserId = user.Id,
+                Balance = 0m,
+                Currency = "AZN",
+                Status = WalletStatus.Active,
+                CardNumber = cardNumber
+            };
+
+            await _uow.WalletWriteRepository.AddAsync(wallet);
+            await _uow.CommitAsync();
+
+            // 4) Assign default role
             await _userManager.AddToRoleAsync(user, "User");
 
-            // 4) Generate confirmation token + link
+            // 5) Generate confirmation token + link
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var encodedToken = Uri.EscapeDataString(token);
 
             var apiBaseUrl = _config["ApiBaseUrl"]?.TrimEnd('/');
-
             if (string.IsNullOrWhiteSpace(apiBaseUrl))
             {
-                // API base yoxdursa da register keçsin, sadəcə email göndərməyək
                 await _audit.WriteAsync(AuditActionType.Register, true, "Register success but ApiBaseUrl missing",
-                    detailsJson: $"{{\"email\":\"{dto.Email}\"}}",
+                    detailsJson: $"{{\"email\":\"{dto.Email}\",\"cardNumber\":\"{cardNumber}\"}}",
                     overrideUserId: user.Id);
 
                 return ServiceResultVoid.Ok("Qeydiyyat uğurludur. Email təsdiqi üçün link konfiqurasiya olunmayıb.");
@@ -104,17 +208,35 @@ namespace DigitalBank.Persistence.Services.Auth
 
             var confirmLink = $"{apiBaseUrl}/api/client/auth/confirm-email?userId={user.Id}&token={encodedToken}";
 
-            // 5) Send email
-            var subject = "DigitalBank — Email təsdiqi";
-            var html = EmailTemplates.ConfirmEmail(
-    displayName: user.FirstName ?? user.UserName ?? "Hörmətli müştəri",
-    confirmLink: confirmLink);
+            // 6) Send email (TRY/CATCH)
+            try
+            {
+                var subject = "DigitalBank — Email təsdiqi";
+                var html = EmailTemplates.ConfirmEmail(
+                    displayName: user.FirstName ?? user.UserName ?? "Hörmətli müştəri",
+                    confirmLink: confirmLink);
 
-            await _emailSender.SendAsync(user.Email!, subject, html);
+                await _emailSender.SendAsync(user.Email!, subject, html);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Register succeeded but confirm email sending failed. Email={Email}",
+                    user.Email);
 
-            // 6) Audit
+                await _audit.WriteAsync(
+                    AuditActionType.Register,
+                    false,
+                    "Register success but email send failed",
+                    detailsJson: $"{{\"email\":\"{dto.Email}\",\"cardNumber\":\"{cardNumber}\"}}",
+                    overrideUserId: user.Id);
+
+                return ServiceResultVoid.Ok("Qeydiyyat uğurludur, amma təsdiq email-i göndərilmədi. Sonra yenidən cəhd edin.");
+            }
+
+            // 7) Audit (email SUCCESS)
             await _audit.WriteAsync(AuditActionType.Register, true, "Register success",
-                detailsJson: $"{{\"email\":\"{dto.Email}\"}}",
+                detailsJson: $"{{\"email\":\"{dto.Email}\",\"cardNumber\":\"{cardNumber}\"}}",
                 overrideUserId: user.Id);
 
             return ServiceResultVoid.Ok("Qeydiyyat uğurludur. Email-ə təsdiq linki göndərildi.");
@@ -155,7 +277,6 @@ namespace DigitalBank.Persistence.Services.Auth
                 return ServiceResult<AuthResponseDto>.Fail("Email təsdiqlənməyib", 400);
             }
 
-            // LockoutOnFailure=true → yanlış cəhdlərdə lockout işləyir
             var signIn = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: true);
             if (!signIn.Succeeded)
             {
@@ -168,20 +289,20 @@ namespace DigitalBank.Persistence.Services.Auth
 
             var (accessToken, accessExp) = await _jwtTokenService.CreateAccessTokenAsync(user);
 
-            // refresh token create + save
+            // refresh token create + save (repo + uow)
             var refreshRaw = GenerateRefreshTokenRaw();
             var refreshExp = DateTime.UtcNow.AddDays(_jwt.RefreshTokenDays);
 
             var rt = new RefreshToken
             {
                 UserId = user.Id,
-                TokenHash = refreshRaw,             // Sadə versiya: raw saxlayırıq
+                TokenHash = refreshRaw,
                 CreatedDate = DateTime.UtcNow,
                 ExpiresAt = refreshExp
             };
 
-            _db.RefreshTokens.Add(rt);
-            await _db.SaveChangesAsync();
+            await _uow.RefreshTokenWriteRepository.AddAsync(rt);
+            await _uow.CommitAsync();
 
             await _audit.WriteAsync(AuditActionType.Login, true, "Login success",
                 detailsJson: $"{{\"email\":\"{dto.Email}\"}}",
@@ -216,7 +337,8 @@ namespace DigitalBank.Persistence.Services.Auth
                 return ServiceResult<AuthResponseDto>.Fail("Refresh token boşdur", 400);
             }
 
-            var rt = await _db.RefreshTokens
+            // read repo Table üstündən (include User lazımdır)
+            var rt = await _uow.RefreshTokenReadRepository.Table
                 .Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.TokenHash == dto.RefreshToken);
 
@@ -250,6 +372,8 @@ namespace DigitalBank.Persistence.Services.Auth
             rt.RevokedAt = DateTime.UtcNow;
             rt.ReplacedByTokenHash = newRefreshRaw;
 
+            _uow.RefreshTokenWriteRepository.Update(rt);
+
             var newRt = new RefreshToken
             {
                 UserId = user.Id,
@@ -258,8 +382,8 @@ namespace DigitalBank.Persistence.Services.Auth
                 ExpiresAt = newRefreshExp
             };
 
-            _db.RefreshTokens.Add(newRt);
-            await _db.SaveChangesAsync();
+            await _uow.RefreshTokenWriteRepository.AddAsync(newRt);
+            await _uow.CommitAsync();
 
             await _audit.WriteAsync(AuditActionType.Refresh, true, "Refresh success",
                 overrideUserId: user.Id);
@@ -293,7 +417,9 @@ namespace DigitalBank.Persistence.Services.Auth
                 return ServiceResultVoid.Fail("Refresh token boşdur", 400);
             }
 
-            var rt = await _db.RefreshTokens.FirstOrDefaultAsync(x => x.TokenHash == dto.RefreshToken);
+            var rt = await _uow.RefreshTokenReadRepository.Table
+                .FirstOrDefaultAsync(x => x.TokenHash == dto.RefreshToken);
+
             if (rt == null)
             {
                 await _audit.WriteAsync(AuditActionType.Logout, false, "Refresh token not found");
@@ -303,7 +429,8 @@ namespace DigitalBank.Persistence.Services.Auth
             if (rt.RevokedAt == null)
             {
                 rt.RevokedAt = DateTime.UtcNow;
-                await _db.SaveChangesAsync();
+                _uow.RefreshTokenWriteRepository.Update(rt);
+                await _uow.CommitAsync();
             }
 
             await _audit.WriteAsync(AuditActionType.Logout, true, "Logout",
@@ -315,7 +442,4 @@ namespace DigitalBank.Persistence.Services.Auth
         private static string GenerateRefreshTokenRaw()
             => Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
     }
-
-    // ====== Email templates helper (keçid: aşağıda ayrıca tam kodunu da verirəm) ======
-
 }

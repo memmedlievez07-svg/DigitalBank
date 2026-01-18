@@ -1,60 +1,96 @@
-﻿using DigitalBank.Application.Interfaces;
+﻿using DigitalBank.Application.Dtos.AdminDashBoardDtos;
+using DigitalBank.Application.Interfaces;
 using DigitalBank.Application.Results;
 using DigitalBank.Application.UnitOfWork;
 using DigitalBank.Domain.Entities;
 using DigitalBank.Domain.Entities.Identity;
-using DigitalBank.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DigitalBank.Persistence.Services
 {
     public class AdminNotificationService : IAdminNotificationService
     {
-        private readonly IUnitOfWork _uow; // Bazaya yazmaq üçün
-        private readonly UserManager<AppUser> _userManager; // İstifadəçiləri tapmaq üçün
+        private readonly IUnitOfWork _uow;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly INotificationPushService _push;
 
-        public AdminNotificationService(IUnitOfWork uow, UserManager<AppUser> userManager)
+        public AdminNotificationService(
+            IUnitOfWork uow,
+            UserManager<AppUser> userManager,
+            INotificationPushService push)
         {
             _uow = uow;
             _userManager = userManager;
+            _push = push;
         }
 
-        public async Task<ServiceResultVoid> SendNotificationToAllAsync(string title, string text)
+        public async Task<ServiceResultVoid> SendToAllAsync(AdminSendNotificationDto dto)
         {
-            // 1. Bütün istifadəçiləri bazadan çəkirik
-            var users = await _userManager.Users.ToListAsync();
+            var userIds = await _userManager.Users
+                .AsNoTracking()
+                .Select(u => u.Id)
+                .ToListAsync();
 
-            if (users == null || !users.Any())
-                return ServiceResultVoid.Fail("Sistemdə istifadəçi tapılmadı", 404);
-
-            foreach (var user in users)
+            // çox user varsa AddRangeAsync istifadə et
+            var notifications = userIds.Select(uid => new Notification
             {
-                // 2. Yeni obyekt yaradırıq - Sənin entity adlarına tam uyğun!
-                var notification = new Notification
-                {
-                    UserId = user.Id,
-                    Title = title,
-                    Body = text, // Səndə 'Body' adlanır, ona görə 'text' bura mənimsədilir
-                    Type = NotificationType.System,
-                    IsRead = false,
-                    // CreatedDate BaseEntity-dən gəlirsə, bəlkə orada avtomatik set olunur
-                    // Əgər yoxdursa, bura 'CreatedDate = DateTime.UtcNow' əlavə edə bilərsən
-                };
+                UserId = uid,
+                Title = dto.Title,
+                Body = dto.Body,
+                Type = dto.Type,
+                IsRead = false,
+                RelatedTransactionId = dto.RelatedTransactionId
+            }).ToList();
 
-                // 3. Repository vasitəsilə əlavə edirik
-                await _uow.NotificationWriteRepository.AddAsync(notification);
+            await _uow.NotificationWriteRepository.AddRangeAsync(notifications);
+            await _uow.CommitAsync();
+
+            // 🔔 real-time push (DB uğurlu olandan sonra)
+            foreach (var uid in userIds)
+            {
+                await _push.PushToUserAsync(uid, new
+                {
+                    title = dto.Title,
+                    body = dto.Body,
+                    type = (int)dto.Type
+                });
+
+                await _push.PushUnreadCountChangedAsync(uid);
             }
 
-            // 4. Bütün dövr bitəndən sonra bazaya yazırıq
-            await _uow.SaveChangesAsync();
+            return ServiceResultVoid.Ok("Broadcast sent");
+        }
 
-            return ServiceResultVoid.Ok("Bildiriş hamıya göndərildi.");
+        public async Task<ServiceResultVoid> SendToUserAsync(AdminSendToUserDto dto)
+        {
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+            if (user == null)
+                return ServiceResultVoid.Fail("User not found", 404);
+
+            var n = new Notification
+            {
+                UserId = dto.UserId,
+                Title = dto.Title,
+                Body = dto.Body,
+                Type = dto.Type,
+                IsRead = false,
+                RelatedTransactionId = dto.RelatedTransactionId
+            };
+
+            await _uow.NotificationWriteRepository.AddAsync(n);
+            await _uow.CommitAsync();
+
+            await _push.PushToUserAsync(dto.UserId, new
+            {
+                title = dto.Title,
+                body = dto.Body,
+                type = (int)dto.Type
+            });
+
+            await _push.PushUnreadCountChangedAsync(dto.UserId);
+
+            return ServiceResultVoid.Ok("Notification sent");
         }
     }
 }

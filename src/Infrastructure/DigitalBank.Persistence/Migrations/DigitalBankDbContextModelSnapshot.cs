@@ -95,8 +95,7 @@ namespace DigitalBank.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("FeeAmount")
                         .HasPrecision(18, 2)
@@ -131,7 +130,7 @@ namespace DigitalBank.Persistence.Migrations
 
                     b.HasIndex("SenderWalletId");
 
-                    b.ToTable("BankTransactions", (string)null);
+                    b.ToTable("BankTransactions");
                 });
 
             modelBuilder.Entity("DigitalBank.Domain.Entities.ChatMessage", b =>
@@ -150,8 +149,8 @@ namespace DigitalBank.Persistence.Migrations
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
@@ -169,11 +168,11 @@ namespace DigitalBank.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiverUserId");
+                    b.HasIndex("ReceiverUserId", "IsRead", "CreatedDate");
 
                     b.HasIndex("SenderUserId", "ReceiverUserId", "CreatedDate");
 
-                    b.ToTable("ChatMessages", (string)null);
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("DigitalBank.Domain.Entities.Identity.AppUser", b =>
@@ -198,6 +197,9 @@ namespace DigitalBank.Persistence.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -273,8 +275,8 @@ namespace DigitalBank.Persistence.Migrations
 
                     b.Property<string>("Body")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -293,8 +295,8 @@ namespace DigitalBank.Persistence.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -307,9 +309,9 @@ namespace DigitalBank.Persistence.Migrations
 
                     b.HasIndex("RelatedTransactionId");
 
-                    b.HasIndex("UserId", "IsRead");
+                    b.HasIndex("UserId", "IsRead", "CreatedDate");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("DigitalBank.Domain.Entities.RefreshToken", b =>
@@ -372,8 +374,12 @@ namespace DigitalBank.Persistence.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Balance")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("CardNumber")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -383,8 +389,14 @@ namespace DigitalBank.Persistence.Migrations
                         .HasMaxLength(3)
                         .HasColumnType("character varying(3)");
 
+                    b.Property<decimal>("DailyLimit")
+                        .HasColumnType("numeric");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("MonthlyLimit")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -395,10 +407,13 @@ namespace DigitalBank.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CardNumber")
+                        .IsUnique();
+
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Wallets", (string)null);
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

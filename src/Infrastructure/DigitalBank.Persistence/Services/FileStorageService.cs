@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace DigitalBank.Persistence.Services.Files
+namespace DigitalBank.Persistence.Services
 {
     public class FileStorageService : IFileStorageService
     {

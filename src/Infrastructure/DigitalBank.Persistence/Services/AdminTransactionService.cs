@@ -1,18 +1,18 @@
 ﻿using DigitalBank.Application.Dtos.AdminDashBoardDtos;
 using DigitalBank.Application.Interfaces;
 using DigitalBank.Application.Results;
-using DigitalBank.Persistence.Dal;
+using DigitalBank.Application.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
-namespace DigitalBank.Persistence.Services.AdminTransactions
+namespace DigitalBank.Persistence.Services
 {
     public class AdminTransactionService : IAdminTransactionService
     {
-        private readonly DigitalBankDbContext _db;
+        private readonly IUnitOfWork _uow;
 
-        public AdminTransactionService(DigitalBankDbContext db)
+        public AdminTransactionService(IUnitOfWork uow)
         {
-            _db = db;
+            _uow = uow;
         }
 
         public async Task<ServiceResult<PagedResult<AdminTransactionListItemDto>>> ListAsync(AdminTransactionFilterDto filter)
@@ -22,7 +22,8 @@ namespace DigitalBank.Persistence.Services.AdminTransactions
             var pageSize = filter.PageSize < 1 ? 20 : filter.PageSize;
             if (pageSize > 200) pageSize = 200;
 
-            var q = _db.BankTransactions
+            // Base query (ReadRepository Table üstündən)
+            var q = _uow.BankTransactionReadRepository.Table
                 .AsNoTracking()
                 .AsQueryable();
 
@@ -46,23 +47,26 @@ namespace DigitalBank.Persistence.Services.AdminTransactions
                 q = q.Where(x => x.Amount <= filter.MaxAmount.Value);
 
             // Sender/Receiver UserId filter (Wallet.UserId vasitəsilə)
+            // DbContext əvəzinə WalletReadRepository.Table
             if (!string.IsNullOrWhiteSpace(filter.SenderUserId))
             {
+                var senderUserId = filter.SenderUserId.Trim();
                 q = q.Where(t =>
                     t.SenderWalletId != null &&
-                    _db.Wallets.Any(w => w.Id == t.SenderWalletId && w.UserId == filter.SenderUserId));
+                    _uow.WalletReadRepository.Table.Any(w => w.Id == t.SenderWalletId && w.UserId == senderUserId));
             }
 
             if (!string.IsNullOrWhiteSpace(filter.ReceiverUserId))
             {
+                var receiverUserId = filter.ReceiverUserId.Trim();
                 q = q.Where(t =>
                     t.ReceiverWalletId != null &&
-                    _db.Wallets.Any(w => w.Id == t.ReceiverWalletId && w.UserId == filter.ReceiverUserId));
+                    _uow.WalletReadRepository.Table.Any(w => w.Id == t.ReceiverWalletId && w.UserId == receiverUserId));
             }
 
             var totalCount = await q.CountAsync();
 
-            // Page
+            // Page (sənin eyni select-in)
             var txPage = await q
                 .OrderByDescending(x => x.CreatedDate)
                 .Skip((page - 1) * pageSize)
@@ -89,7 +93,7 @@ namespace DigitalBank.Persistence.Services.AdminTransactions
                 .Distinct()
                 .ToList();
 
-            var walletUserMap = await _db.Wallets
+            var walletUserMap = await _uow.WalletReadRepository.Table
                 .AsNoTracking()
                 .Where(w => walletIds.Contains(w.Id))
                 .Select(w => new { w.Id, w.UserId })
@@ -126,7 +130,7 @@ namespace DigitalBank.Persistence.Services.AdminTransactions
 
         public async Task<ServiceResult<AdminTransactionDetailsDto>> GetByIdAsync(int id)
         {
-            var tx = await _db.BankTransactions
+            var tx = await _uow.BankTransactionReadRepository.Table
                 .AsNoTracking()
                 .Where(x => x.Id == id)
                 .Select(t => new
@@ -152,16 +156,22 @@ namespace DigitalBank.Persistence.Services.AdminTransactions
             string? receiverUserId = null;
 
             if (tx.SenderWalletId.HasValue)
-                senderUserId = await _db.Wallets.AsNoTracking()
+            {
+                senderUserId = await _uow.WalletReadRepository.Table
+                    .AsNoTracking()
                     .Where(w => w.Id == tx.SenderWalletId.Value)
                     .Select(w => w.UserId)
                     .FirstOrDefaultAsync();
+            }
 
             if (tx.ReceiverWalletId.HasValue)
-                receiverUserId = await _db.Wallets.AsNoTracking()
+            {
+                receiverUserId = await _uow.WalletReadRepository.Table
+                    .AsNoTracking()
                     .Where(w => w.Id == tx.ReceiverWalletId.Value)
                     .Select(w => w.UserId)
                     .FirstOrDefaultAsync();
+            }
 
             var dto = new AdminTransactionDetailsDto
             {
@@ -181,16 +191,6 @@ namespace DigitalBank.Persistence.Services.AdminTransactions
             };
 
             return ServiceResult<AdminTransactionDetailsDto>.Ok(dto);
-        }
-
-        Task<ServiceResult<object>> IAdminTransactionService.ListAsync(AdminTransactionFilterDto filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<ServiceResult<object>> IAdminTransactionService.GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

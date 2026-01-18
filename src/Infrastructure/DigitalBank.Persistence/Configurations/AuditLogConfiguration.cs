@@ -14,6 +14,7 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
 
         builder.Property(x => x.ActionType)
                .IsRequired();
+        builder.Property(x => x.UserId).IsRequired(false);
 
         builder.Property(x => x.IsSuccess)
                .IsRequired();

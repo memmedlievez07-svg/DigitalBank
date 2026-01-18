@@ -11,9 +11,10 @@ namespace DigitalBank.Api.Services
             var options = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true, // dev-də https yoxdursa false edə bilərsən
-                SameSite = SameSiteMode.Strict,
-                Expires = dto.RefreshTokenExpiresAtUtc
+                Secure = false,              // localhost HTTP üçün
+                SameSite = SameSiteMode.Lax, // local-da rahat
+                Expires = dto.RefreshTokenExpiresAtUtc,
+                Path = "/"
             };
 
             response.Cookies.Append(CookieName, dto.RefreshToken, options);
@@ -23,6 +24,11 @@ namespace DigitalBank.Api.Services
             => request.Cookies.TryGetValue(CookieName, out var token) ? token : null;
 
         public void DeleteRefreshTokenCookie(HttpResponse response)
-            => response.Cookies.Delete(CookieName);
+        {
+            response.Cookies.Delete(CookieName, new CookieOptions
+            {
+                Path = "/"
+            });
+        }
     }
 }

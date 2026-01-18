@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace DigitalBank.Persistence.Services.Jwt
+namespace DigitalBank.Persistence.Services
 {
     public class JwtTokenService : IJwtTokenService
     {

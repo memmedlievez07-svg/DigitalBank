@@ -9,7 +9,7 @@ namespace DigitalBank.Application.Dtos
     public class TransferRequestDto
     {
         // receiver üçün ya WalletId, ya da UserName/Email seçmək olar.
-        public int ReceiverWalletId { get; set; }
+        public int ReceiverCardNumber { get; set; }
 
         public decimal Amount { get; set; }
         public string? Description { get; set; }

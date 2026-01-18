@@ -9,6 +9,7 @@ namespace DigitalBank.Domain.Entities
     public class Wallet : BaseEntity
     {
         public string UserId { get; set; }
+        public string CardNumber { get; set; } = null!;
         public AppUser User { get; set; } = null!;
 
         public decimal Balance { get; set; }
@@ -18,5 +19,7 @@ namespace DigitalBank.Domain.Entities
 
         public ICollection<BankTransaction> SentTransactions { get; set; } = new List<BankTransaction>();
         public ICollection<BankTransaction> ReceivedTransactions { get; set; } = new List<BankTransaction>();
+        public decimal DailyLimit { get; set; } = 1000;   // Günlük standart limit
+        public decimal MonthlyLimit { get; set; } = 10000; // Aylıq standart limit
     }
 }

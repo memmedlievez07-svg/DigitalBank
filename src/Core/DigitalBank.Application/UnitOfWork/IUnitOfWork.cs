@@ -4,6 +4,8 @@ using DigitalBank.Application.Repositories.ChatMessage;
 using DigitalBank.Application.Repositories.Notification;
 using DigitalBank.Application.Repositories.RefreshToken;
 using DigitalBank.Application.Repositories.Wallet;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 
 namespace DigitalBank.Application.UnitOfWork
 {
@@ -11,18 +13,27 @@ namespace DigitalBank.Application.UnitOfWork
     {
         IBankTransactionReadRepository BankTransactionReadRepository { get; }
         IBankTransactionWriteRepository BankTransactionWriteRepository { get; }
+
         IRefreshTokenReadRepository RefreshTokenReadRepository { get; }
         IRefreshTokenWriteRepository RefreshTokenWriteRepository { get; }
+
         IWalletReadRepository WalletReadRepository { get; }
         IWalletWriteRepository WalletWriteRepository { get; }
+
         IAuditLogReadRepository AuditLogReadRepository { get; }
         IAuditLogWriteRepository AuditLogWriteRepository { get; }
+
         IChatMessageReadRepository ChatMessageReadRepository { get; }
         IChatMessageWriteRepository ChatMessageWriteRepository { get; }
+
         INotificationReadRepository NotificationReadRepository { get; }
-        INotificationWriteRepository NotificationWriteRepository
-        {
-            get;
-        }
+        INotificationWriteRepository NotificationWriteRepository { get; }
+
+        int Commit();
+        Task<int> CommitAsync(CancellationToken ct = default);
+
+        Task<IDbContextTransaction> BeginTransactionAsync(
+            IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
+            CancellationToken ct = default);
     }
 }

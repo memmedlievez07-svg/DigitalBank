@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace DigitalBank.Persistence.Services.Email
+namespace DigitalBank.Persistence.Services
 {
     public static class EmailTemplates
     {

@@ -6,14 +6,23 @@ using DigitalBank.Persistence.PersistenceServiceRegistration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Serilog.Debugging;
+using Stripe;
+using System.Diagnostics;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Serilog
+// Serilog self-log (DIQQET: System.IO.File yaziriq ki conflict olmasin)
+SelfLog.Enable(msg =>
+{
+    Debug.WriteLine(msg);
+    System.IO.File.AppendAllText("serilog-selflog.txt", msg + Environment.NewLine);
+});
+
+// Serilog main
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
@@ -22,13 +31,17 @@ builder.Host.UseSerilog();
 // Layers
 builder.Services.AddPersistenceServiceRegistration(builder.Configuration);
 
+// Stripe global api key
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+
 // HttpContext based stuff (API layer)
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserContext, HttpCurrentUserContext>();
 builder.Services.AddScoped<IAuthCookieService, AuthCookieService>();
 
 // JWT Bearer validate
-var jwt = builder.Configuration.GetSection("JwtOptions").Get<JwtOption>()!;
+var jwt = builder.Configuration.GetSection("JwtOptions").Get<JwtOption>()
+          ?? throw new InvalidOperationException("JwtOptions config is missing.");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -54,7 +67,13 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// CORS (cookie refresh istifadə edirsənsə mütləq belə olmalıdır)
+// SignalR (1 defe kifayetdir)
+builder.Services.AddSignalR();
+
+builder.Services.AddScoped<INotificationPushService, DigitalBank.Api.Realtime.NotificationPushService>();
+builder.Services.AddScoped<IChatPushService, DigitalBank.Api.Realtime.ChatPushService>();
+
+// CORS (cookie refresh istifadə edirsənsə mütləq AllowCredentials olmalıdır)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -73,39 +92,41 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Swagger + JWT
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "DigitalBank API",
-        Version = "v1"
-    });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "DigitalBank API", Version = "v1" });
 
-    var securityScheme = new OpenApiSecurityScheme
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Description = "Enter JWT Bearer token **only**",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
-        BearerFormat = "JWT"
-    };
-
-    options.AddSecurityDefinition("Bearer", securityScheme);
+        BearerFormat = "JWT",
+        Description = "Enter JWT Bearer token only"
+    });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            securityScheme,
-            new string[] { }
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
         }
     });
 });
 
-
-
 var app = builder.Build();
 
+// Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -114,21 +135,24 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Correlation Id
+// Middleware order (sənin kimi: correlation + global exception)
 app.UseMiddleware<CorrelationIdMiddleware>();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseStaticFiles();
 
-
-// app.UseMiddleware<GlobalExceptionMiddleware>();
+// SignalR hubs
+app.MapHub<DigitalBank.Api.Hubs.NotificationHub>("/hubs/notifications");
+app.MapHub<DigitalBank.Api.Hubs.ChatHub>("/hubs/chat");
 
 app.MapControllers();
 
-// Role seed
+// Role seed (sadə variant)
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();

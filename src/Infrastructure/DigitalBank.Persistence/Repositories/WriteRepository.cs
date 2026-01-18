@@ -13,14 +13,13 @@ namespace DigitalBank.Persistence.Repositories
     public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
     {
 
-        private readonly DbContext _ctx;
-        private DbSet<T> Table => _ctx.Set<T>();
+        private readonly DigitalBankDbContext _ctx;
+        public DbSet<T> Table => _ctx.Set<T>();
         public WriteRepository(DigitalBankDbContext ctx)
         {
             _ctx = ctx;
         }
 
-        DbSet<T> IGenericRepository<T>.Table => _ctx.Set<T>();
         public async Task AddAsync(T entity, CancellationToken ct = default)
         {
             await Table.AddAsync(entity,ct);
@@ -31,7 +30,6 @@ namespace DigitalBank.Persistence.Repositories
             await Table.AddRangeAsync(entities,ct);
         }
 
-        public int Commit() => _ctx.SaveChanges();
 
         public void Remove(T entity)
         {
@@ -42,7 +40,6 @@ namespace DigitalBank.Persistence.Repositories
         {
             Table.Update(entity);
         }
-        public async Task<int> CommitAsync(CancellationToken ct = default) => await _ctx.SaveChangesAsync();
 
 
     }

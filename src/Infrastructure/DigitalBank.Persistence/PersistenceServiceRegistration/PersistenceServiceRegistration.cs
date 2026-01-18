@@ -5,10 +5,6 @@ using DigitalBank.Application.UnitOfWork;
 using DigitalBank.Domain.Entities.Identity;
 using DigitalBank.Persistence.Dal;
 using DigitalBank.Persistence.Services;
-using DigitalBank.Persistence.Services.AdminUsers;
-using DigitalBank.Persistence.Services.Audit;
-using DigitalBank.Persistence.Services.Auth;
-using DigitalBank.Persistence.Services.Jwt;
 using DigitalBank.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +44,24 @@ namespace DigitalBank.Persistence.PersistenceServiceRegistration
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
+            services.AddScoped<IAdminWalletService, AdminWalletService>();
+            services.AddScoped<IAdminTransactionService, AdminTransactionService>();
+            services.AddScoped<IWalletService, WalletService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IWalletCodeGenerator, WalletCodeGenerator>();
+            services.AddScoped<ITransferService, TransferService>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IFileStorageService, FileStorageService>();
+            services.AddScoped<IAdminDashboardService, AdminDashboardService>();
+            services.AddScoped<IAdminNotificationService,AdminNotificationService>();
+            services.AddScoped<IAuthService, AuthService>();
+
+
+
+
+
 
 
             return services;

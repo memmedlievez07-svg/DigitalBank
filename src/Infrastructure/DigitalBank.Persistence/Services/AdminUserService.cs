@@ -5,7 +5,7 @@ using DigitalBank.Domain.Entities.Identity;
 using DigitalBank.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
-namespace DigitalBank.Persistence.Services.AdminUsers
+namespace DigitalBank.Persistence.Services
 {
     public class AdminUserService : IAdminUserService
     {

@@ -1,19 +1,23 @@
 ﻿using DigitalBank.Application.Dtos.AdminDashBoardDtos;
 using DigitalBank.Application.Interfaces;
 using DigitalBank.Application.Results;
+using DigitalBank.Application.UnitOfWork;
+using DigitalBank.Domain.Entities.Identity;
 using DigitalBank.Domain.Enums;
-using DigitalBank.Persistence.Dal;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace DigitalBank.Persistence.Services.AdminDashboard
+namespace DigitalBank.Persistence.Services
 {
     public class AdminDashboardService : IAdminDashboardService
     {
-        private readonly DigitalBankDbContext _db;
+        private readonly IUnitOfWork _uow;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AdminDashboardService(DigitalBankDbContext db)
+        public AdminDashboardService(IUnitOfWork uow, UserManager<AppUser> userManager)
         {
-            _db = db;
+            _uow = uow;
+            _userManager = userManager;
         }
 
         public async Task<ServiceResult<AdminDashboardDto>> GetAsync()
@@ -24,34 +28,40 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
             var last30 = now.AddDays(-30);
 
             // =========================
-            // USERS
+            // USERS (Identity)
             // =========================
-            var totalUsers = await _db.Users.CountAsync();
-            var lockedUsers = await _db.Users.CountAsync(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value.UtcDateTime > now);
-            var confirmedUsers = await _db.Users.CountAsync(u => u.EmailConfirmed);
+            var usersQ = _userManager.Users.AsNoTracking();
+
+            var totalUsers = await usersQ.CountAsync();
+            var lockedUsers = await usersQ.CountAsync(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value.UtcDateTime > now);
+            var confirmedUsers = await usersQ.CountAsync(u => u.EmailConfirmed);
             var confirmedRate = totalUsers == 0 ? 0 : (double)confirmedUsers / totalUsers * 100.0;
 
-            // AppUser CreatedDate yoxdur -> 0
+            // AppUser CreatedDate yoxdur -> 0 (sənin commentinə uyğun saxladım)
             var newUsersLast7 = 0;
 
             // =========================
             // WALLETS
             // =========================
-            var totalWallets = await _db.Wallets.CountAsync();
-            var totalBalance = totalWallets == 0 ? 0m : await _db.Wallets.SumAsync(w => w.Balance);
+            var walletsQ = _uow.WalletReadRepository.Table.AsNoTracking();
+
+            var totalWallets = await walletsQ.CountAsync();
+            var totalBalance = totalWallets == 0 ? 0m : await walletsQ.SumAsync(w => w.Balance);
             var avgBalance = totalWallets == 0 ? 0m : totalBalance / totalWallets;
 
-            var walletActive = await _db.Wallets.CountAsync(w => w.Status == WalletStatus.Active);
-            var walletBlocked = await _db.Wallets.CountAsync(w => w.Status == WalletStatus.Blocked);
-            var walletClosed = await _db.Wallets.CountAsync(w => w.Status == WalletStatus.Closed);
+            var walletActive = await walletsQ.CountAsync(w => w.Status == WalletStatus.Active);
+            var walletBlocked = await walletsQ.CountAsync(w => w.Status == WalletStatus.Blocked);
+            var walletClosed = await walletsQ.CountAsync(w => w.Status == WalletStatus.Closed);
 
             // =========================
             // TRANSACTIONS
             // =========================
-            var totalTx = await _db.BankTransactions.CountAsync();
-            var last24TxCount = await _db.BankTransactions.CountAsync(t => t.CreatedDate >= last24);
+            var txQ = _uow.BankTransactionReadRepository.Table.AsNoTracking();
 
-            var txLast30Q = _db.BankTransactions.Where(t => t.CreatedDate >= last30);
+            var totalTx = await txQ.CountAsync();
+            var last24TxCount = await txQ.CountAsync(t => t.CreatedDate >= last24);
+
+            var txLast30Q = txQ.Where(t => t.CreatedDate >= last30);
             var txLast30Count = await txLast30Q.CountAsync();
             var txLast30Volume = txLast30Count == 0 ? 0m : await txLast30Q.SumAsync(t => t.Amount);
 
@@ -62,16 +72,18 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
 
             var txLast30SuccessRate = txLast30Count == 0 ? 0 : (double)txLast30Completed / txLast30Count * 100.0;
 
-            var failedLast24 = await _db.BankTransactions.CountAsync(t => t.CreatedDate >= last24 && t.Status == TransactionStatus.Failed);
+            var failedLast24 = await txQ.CountAsync(t => t.CreatedDate >= last24 && t.Status == TransactionStatus.Failed);
 
             // =========================
             // NOTIFICATIONS
             // =========================
-            var totalNotif = await _db.Notifications.CountAsync();
-            var unreadNotif = await _db.Notifications.CountAsync(n => !n.IsRead);
-            var last7Notif = await _db.Notifications.CountAsync(n => n.CreatedDate >= last7);
+            var notifQ = _uow.NotificationReadRepository.Table.AsNoTracking();
 
-            var notifLast7Q = _db.Notifications.Where(n => n.CreatedDate >= last7);
+            var totalNotif = await notifQ.CountAsync();
+            var unreadNotif = await notifQ.CountAsync(n => !n.IsRead);
+            var last7Notif = await notifQ.CountAsync(n => n.CreatedDate >= last7);
+
+            var notifLast7Q = notifQ.Where(n => n.CreatedDate >= last7);
 
             var notifIncoming = await notifLast7Q.CountAsync(n => n.Type == NotificationType.IncomingTransfer);
             var notifOutgoing = await notifLast7Q.CountAsync(n => n.Type == NotificationType.OutgoingTransfer);
@@ -81,18 +93,21 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
             // =========================
             // CHAT
             // =========================
-            var chatLast24 = await _db.ChatMessages.CountAsync(m => m.CreatedDate >= last24);
-            var chatUnreadLast24 = await _db.ChatMessages.CountAsync(m => m.CreatedDate >= last24 && !m.IsRead);
+            var chatQ = _uow.ChatMessageReadRepository.Table.AsNoTracking();
+
+            var chatLast24 = await chatQ.CountAsync(m => m.CreatedDate >= last24);
+            var chatUnreadLast24 = await chatQ.CountAsync(m => m.CreatedDate >= last24 && !m.IsRead);
 
             // =========================
             // AUDIT
             // =========================
-            var auditFailedLast24 = await _db.AuditLogs.CountAsync(a => !a.IsSuccess && a.CreatedDate >= last24);
+            var auditQ = _uow.AuditLogReadRepository.Table.AsNoTracking();
+            var auditFailedLast24 = await auditQ.CountAsync(a => !a.IsSuccess && a.CreatedDate >= last24);
 
             // =========================
             // TRENDS
             // =========================
-            var txDaily = await _db.BankTransactions
+            var txDaily = await txQ
                 .Where(t => t.CreatedDate >= last7)
                 .GroupBy(t => new DateTime(t.CreatedDate.Year, t.CreatedDate.Month, t.CreatedDate.Day))
                 .Select(g => new DailyTxTrendDto
@@ -104,7 +119,6 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
                 .OrderBy(x => x.DayUtc)
                 .ToListAsync();
 
-            // New users trend (CreatedDate yoxdur -> 0)
             var newUsersTrend = Enumerable.Range(0, 7)
                 .Select(i => new DailyCountTrendDto
                 {
@@ -116,7 +130,7 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
             // =========================
             // LATEST LISTS
             // =========================
-            var latestTx = await _db.BankTransactions
+            var latestTx = await txQ
                 .OrderByDescending(t => t.CreatedDate)
                 .Take(10)
                 .Select(t => new LatestTransactionDto
@@ -134,7 +148,7 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
                 })
                 .ToListAsync();
 
-            var latestAudits = await _db.AuditLogs
+            var latestAudits = await auditQ
                 .OrderByDescending(a => a.CreatedDate)
                 .Take(15)
                 .Select(a => new LatestAuditDto
@@ -150,7 +164,7 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
                 })
                 .ToListAsync();
 
-            var latestNotifs = await _db.Notifications
+            var latestNotifs = await notifQ
                 .OrderByDescending(n => n.CreatedDate)
                 .Take(10)
                 .Select(n => new LatestNotificationDto
@@ -165,9 +179,8 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
 
             // =========================
             // TOP ACTIVE WALLETS (Last 7 days)
-            // Activity = sent + received count, volume = sent + received amount
             // =========================
-            var txLast7 = _db.BankTransactions.Where(t => t.CreatedDate >= last7);
+            var txLast7 = txQ.Where(t => t.CreatedDate >= last7);
 
             var sentAgg = txLast7.Where(t => t.SenderWalletId != null)
                 .GroupBy(t => t.SenderWalletId!.Value)
@@ -187,7 +200,7 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
                     RecvVolume = g.Sum(x => x.Amount)
                 });
 
-            var topActiveWallets = await _db.Wallets
+            var topActiveWallets = await walletsQ
                 .Select(w => new
                 {
                     w.Id,
@@ -196,7 +209,6 @@ namespace DigitalBank.Persistence.Services.AdminDashboard
                     Sent = sentAgg.FirstOrDefault(s => s.WalletId == w.Id),
                     Recv = recvAgg.FirstOrDefault(r => r.WalletId == w.Id)
                 })
-                .AsNoTracking()
                 .ToListAsync();
 
             var topActiveWalletDtos = topActiveWallets

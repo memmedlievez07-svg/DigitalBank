@@ -8,8 +8,7 @@ namespace DigitalBank.Application.Repositories
         Task AddRangeAsync(IEnumerable<T> entities, CancellationToken ct = default);
         void Update(T entity);
         void Remove(T entity);
-        int Commit();
-        Task<int> CommitAsync(CancellationToken ct = default);
+       
     }
 }
 

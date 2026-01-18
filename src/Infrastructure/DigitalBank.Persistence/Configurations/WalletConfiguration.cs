@@ -29,7 +29,15 @@ namespace DigitalBank.Persistence.Configurations
                    .HasForeignKey(t => t.ReceiverWalletId)
                    .OnDelete(DeleteBehavior.Restrict);
 
+             builder.Property(x => x.CardNumber)
+                     .HasMaxLength(16)
+                     .IsRequired();
+
+            builder.HasIndex(x => x.CardNumber).IsUnique();
+
+
             builder.HasIndex(x => x.UserId).IsUnique(); // 1 user = 1 wallet
+
         }
     }
 }

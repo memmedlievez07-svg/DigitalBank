@@ -5,7 +5,7 @@ using DigitalBank.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
-namespace DigitalBank.Persistence.Services.Profile
+namespace DigitalBank.Persistence.Services
 {
     public class ProfileService : IProfileService
     {

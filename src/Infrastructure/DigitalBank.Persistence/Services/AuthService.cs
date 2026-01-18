@@ -142,6 +142,8 @@ namespace DigitalBank.Persistence.Services
         //}
         public async Task<ServiceResultVoid> RegisterAsync(RegisterRequestDto dto)
         {
+            
+            //TODO Use BeginTransaction and Commit
             // 1) Check email exists
             var existing = await _userManager.FindByEmailAsync(dto.Email);
             if (existing != null)
@@ -150,6 +152,7 @@ namespace DigitalBank.Persistence.Services
                     detailsJson: $"{{\"email\":\"{dto.Email}\"}}");
                 return ServiceResultVoid.Fail("Email artıq mövcuddur", 400);
             }
+            //TODO centralize it, but this logging is unnecessary
 
             // 2) Create user (Identity)
             var user = new AppUser
@@ -164,8 +167,12 @@ namespace DigitalBank.Persistence.Services
                 EmailConfirmed = false,
                 CreatedDate = DateTime.UtcNow
             };
+            //TODO use mapping
+            // Creating entity date centralize at the dbContext level
 
             var createRes = await _userManager.CreateAsync(user, dto.Password);
+            //TODO Use fullName of variable identityResult for ex.
+            //TODO Encapsulate it in another method don't every time iterate error object in service
             if (!createRes.Succeeded)
             {
                 var errs = createRes.Errors.Select(e => e.Description).ToList();
@@ -188,6 +195,7 @@ namespace DigitalBank.Persistence.Services
 
             await _uow.WalletWriteRepository.AddAsync(wallet);
             await _uow.CommitAsync();
+            //TODO Commit Acting like SaveChanges change it or use entity tracker
 
             // 4) Assign default role
             await _userManager.AddToRoleAsync(user, "User");
@@ -205,9 +213,13 @@ namespace DigitalBank.Persistence.Services
 
                 return ServiceResultVoid.Ok("Qeydiyyat uğurludur. Email təsdiqi üçün link konfiqurasiya olunmayıb.");
             }
+            
+            //TODO encapsulate sending Mail to another service and change apiBaseUrl (Take it from httpContext)
 
             var confirmLink = $"{apiBaseUrl}/api/client/auth/confirm-email?userId={user.Id}&token={encodedToken}";
 
+            //TODO dont use try catch in try catch. You have already used globalExceptionHandle middleware 
+            //TODO dont use magic strings inside a code 
             // 6) Send email (TRY/CATCH)
             try
             {
@@ -233,7 +245,7 @@ namespace DigitalBank.Persistence.Services
 
                 return ServiceResultVoid.Ok("Qeydiyyat uğurludur, amma təsdiq email-i göndərilmədi. Sonra yenidən cəhd edin.");
             }
-
+//TODO remove extra comments which clarifies action. Your methodName should be explain process 
             // 7) Audit (email SUCCESS)
             await _audit.WriteAsync(AuditActionType.Register, true, "Register success",
                 detailsJson: $"{{\"email\":\"{dto.Email}\",\"cardNumber\":\"{cardNumber}\"}}",
@@ -337,11 +349,13 @@ namespace DigitalBank.Persistence.Services
                 return ServiceResult<AuthResponseDto>.Fail("Refresh token boşdur", 400);
             }
 
+            //TODO encapsulate it ad dataAccess level
             // read repo Table üstündən (include User lazımdır)
             var rt = await _uow.RefreshTokenReadRepository.Table
                 .Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.TokenHash == dto.RefreshToken);
 
+            //TODO use fullName of variable
             if (rt == null)
             {
                 await _audit.WriteAsync(AuditActionType.Refresh, false, "Refresh token not found");

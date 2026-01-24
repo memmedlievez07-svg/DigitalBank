@@ -24,23 +24,64 @@ namespace DigitalBank.Persistence.Services
 
             var userId = _current.UserId!;
 
-            var w = await _uow.WalletReadRepository.Table
+            // 1. İlk olaraq cüzdanı və tranzaksiyaları (lazımi məlumatlarla) çəkirik
+            var walletEntity = await _uow.WalletReadRepository.Table
                 .AsNoTracking()
-                .Where(x => x.UserId == userId)
-                .Select(x => new WalletMeDto
-                {
-                    Id = x.Id,
-                    CardNumber = x.CardNumber,
-                    Balance = x.Balance,
-                    Currency = x.Currency,
-                    Status = x.Status
-                })
-                .FirstOrDefaultAsync();
+                .Include(x => x.SentTransactions)
+                    .ThenInclude(t => t.ReceiverWallet.User)
+                .Include(x => x.ReceivedTransactions)
+                    .ThenInclude(t => t.SenderWallet.User)
+                .FirstOrDefaultAsync(x => x.UserId == userId);
 
-            if (w == null)
+            if (walletEntity == null)
                 return ServiceResult<WalletMeDto>.Fail("Wallet not found", 404);
 
-            return ServiceResult<WalletMeDto>.Ok(w);
+            // 2. Yaddaşda (In-Memory) DTO-ya çevirmə və birləşdirmə edirik
+            var sent = walletEntity.SentTransactions.Select(t => new TransactionDetailDto
+            {
+                Id = t.Id,
+                Amount = -t.Amount,
+                Description = t.Description,
+                ReferenceNo = t.ReferenceNo,
+                CreatedDate = t.CreatedDate,
+                Type = 1,
+                CounterpartyName = t.ReceiverWallet?.User != null
+                    ? $"{t.ReceiverWallet.User.FirstName} {t.ReceiverWallet.User.LastName}"
+                    : "Naməlum",
+                CounterpartyCard = t.ReceiverWallet?.CardNumber ?? "****"
+            });
+
+            var received = walletEntity.ReceivedTransactions.Select(t => new TransactionDetailDto
+            {
+                Id = t.Id,
+                Amount = t.Amount,
+                Description = t.Description,
+                ReferenceNo = t.ReferenceNo,
+                CreatedDate = t.CreatedDate,
+                Type = 0,
+                CounterpartyName = t.SenderWallet?.User != null
+                    ? $"{t.SenderWallet.User.FirstName} {t.SenderWallet.User.LastName}"
+                    : "Naməlum",
+                CounterpartyCard = t.SenderWallet?.CardNumber ?? "****"
+            });
+
+            // 3. Birləşdir və sırala
+            var allTransactions = sent.Concat(received)
+                .OrderByDescending(t => t.CreatedDate)
+                .Take(15)
+                .ToList();
+
+            var dto = new WalletMeDto
+            {
+                Id = walletEntity.Id,
+                CardNumber = walletEntity.CardNumber,
+                Balance = walletEntity.Balance,
+                Currency = walletEntity.Currency,
+                Status = (int)walletEntity.Status,
+                Transactions = allTransactions
+            };
+
+            return ServiceResult<WalletMeDto>.Ok(dto);
         }
     }
 }

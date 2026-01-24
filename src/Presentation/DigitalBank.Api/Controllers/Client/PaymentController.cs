@@ -1,14 +1,14 @@
-﻿using DigitalBank.Api.Controllers.Base;
-using DigitalBank.Application.Dtos;
-using DigitalBank.Application.Dtos.Stripe;
+﻿using Microsoft.AspNetCore.Mvc;
 using DigitalBank.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using DigitalBank.Application.Dtos; // DTO-lar buradadırsa saxla, yoxsa sil
+using System.IO;
 
-namespace DigitalBank.Api.Controllers.Client
+namespace DigitalBank.WebAPI.Controllers
 {
-    [Route("api/client/payment")]
-    public class PaymentController : ApiControllerBase
+    [ApiController]
+    // Frontend-in axtardığı "api/client/payment" route-u:
+    [Route("api/client/[controller]")]
+    public class PaymentController : ControllerBase
     {
         private readonly IStripePaymentService _stripeService;
 
@@ -17,85 +17,42 @@ namespace DigitalBank.Api.Controllers.Client
             _stripeService = stripeService;
         }
 
-        /// <summary>
-        /// Stripe Checkout yaradır və URL qaytarır
-        /// </summary>
-        [Authorize]
+        // 1. Stripe Sessiyasını Başladan Metod (Top-up üçün mütləqdir)
         [HttpPost("create-checkout")]
-        public async Task<IActionResult> CreateCheckout([FromBody] TopUpRequestDto dto)
+        public async Task<IActionResult> CreateCheckout([FromBody] TopUpRequest request)
         {
-            var result = await _stripeService.CreateCheckoutSessionAsync(dto.Amount, dto.Currency);
+            // Servisindəki metodun adını yoxla (CreateCheckoutSessionAsync və ya oxşar)
+            var result = await _stripeService.CreateCheckoutSessionAsync(request.Amount);
 
             if (!result.Success)
-                return FromResult(result);
-
-            var response = new TopUpResponseDto
             {
-                CheckoutUrl = result.Data!,
-                SessionId = result.Data!.Split("session_id=").LastOrDefault() ?? ""
-            };
+                return BadRequest(result);
+            }
 
-            return Ok(new { success = true, data = response });
+            return Ok(result);
         }
 
-        /// <summary>
-        /// Stripe Webhook - ödəniş uğurlu olanda avtomatik çağırılır
-        /// </summary>
-        [AllowAnonymous]
+        // 2. Stripe-dan gələn bildirişlər (Webhook)
         [HttpPost("webhook")]
         public async Task<IActionResult> StripeWebhook()
         {
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            var stripeSignature = Request.Headers["Stripe-Signature"].ToString();
+            var signature = Request.Headers["Stripe-Signature"];
 
-            var result = await _stripeService.HandleWebhookAsync(json, stripeSignature);
+            var result = await _stripeService.HandleWebhookAsync(json, signature);
 
             if (!result.Success)
-                return BadRequest(new { error = result.Message });
+            {
+                return BadRequest();
+            }
 
             return Ok();
         }
+    }
 
-        /// <summary>
-        /// Success redirect endpoint (Stripe-dan qayıdanda)
-        /// </summary>
-        [AllowAnonymous]
-        [HttpGet("success")]
-        public async Task<IActionResult> PaymentSuccess([FromQuery] string session_id)
-        {
-            if (string.IsNullOrWhiteSpace(session_id))
-                return BadRequest("Session ID is required");
-
-            var statusResult = await _stripeService.GetPaymentStatusAsync(session_id);
-
-            if (!statusResult.Success)
-                return BadRequest(statusResult.Message);
-
-            // Frontend-ə redirect (burada frontend URL-inizi yazın)
-            var frontendUrl = "http://localhost:5173"; // CHANGE THIS
-            return Redirect($"{frontendUrl}/payment/success?session_id={session_id}");
-        }
-
-        /// <summary>
-        /// Cancel redirect endpoint (user ödənişi cancel edərsə)
-        /// </summary>
-        [AllowAnonymous]
-        [HttpGet("cancel")]
-        public IActionResult PaymentCancel()
-        {
-            var frontendUrl = "http://localhost:5173"; // CHANGE THIS
-            return Redirect($"{frontendUrl}/payment/cancel");
-        }
-
-        /// <summary>
-        /// Payment status yoxlamaq üçün
-        /// </summary>
-        [Authorize]
-        [HttpGet("status/{sessionId}")]
-        public async Task<IActionResult> GetPaymentStatus(string sessionId)
-        {
-            var result = await _stripeService.GetPaymentStatusAsync(sessionId);
-            return FromResult(result);
-        }
+    // Bu DTO bəlkə başqa yerdədir, amma xəta çıxmasın deyə bura da əlavə edirəm
+    public class TopUpRequest
+    {
+        public decimal Amount { get; set; }
     }
 }

@@ -1,10 +1,12 @@
-﻿using DigitalBank.Api.Middlewares;
+﻿using DigitalBank.Api.Hubs;
+using DigitalBank.Api.Middlewares;
 using DigitalBank.Api.Services;
 using DigitalBank.Application.Interfaces;
 using DigitalBank.Application.Options;
 using DigitalBank.Persistence.PersistenceServiceRegistration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -13,7 +15,13 @@ using Stripe;
 using System.Diagnostics;
 using System.Text;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: false, reloadOnChange: false);
+var aa = builder.Environment.EnvironmentName;
 
 // Serilog self-log (DIQQET: System.IO.File yaziriq ki conflict olmasin)
 SelfLog.Enable(msg =>
@@ -38,6 +46,7 @@ StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserContext, HttpCurrentUserContext>();
 builder.Services.AddScoped<IAuthCookieService, AuthCookieService>();
+builder.Services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
 // JWT Bearer validate
 var jwt = builder.Configuration.GetSection("JwtOptions").Get<JwtOption>()
@@ -62,6 +71,22 @@ builder.Services.AddAuthentication(options =>
 
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
         ClockSkew = TimeSpan.FromSeconds(30)
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"]; // SignalR bunu göndərir
+
+            // Əgər sorğu SignalR hub-larına gedirsə, tokeni URL-dən oxu
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) &&
+                (path.StartsWithSegments("/hubs/notifications") || path.StartsWithSegments("/hubs/chat")))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 
@@ -127,13 +152,15 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 // Swagger
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName=="Local")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 
 // Middleware order (sənin kimi: correlation + global exception)
 app.UseMiddleware<CorrelationIdMiddleware>();
@@ -144,7 +171,6 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseStaticFiles();
 
 // SignalR hubs
 app.MapHub<DigitalBank.Api.Hubs.NotificationHub>("/hubs/notifications");

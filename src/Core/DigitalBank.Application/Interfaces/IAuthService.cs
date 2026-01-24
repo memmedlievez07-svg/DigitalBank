@@ -11,5 +11,6 @@ namespace DigitalBank.Application.Interfaces
         Task<ServiceResult<AuthResponseDto>> LoginAsync(LoginRequestDto request);
         Task<ServiceResult<AuthResponseDto>> RefreshAsync(RefreshTokenRequestDto request);
         Task<ServiceResultVoid> LogoutAsync(RefreshTokenRequestDto dto);
+        Task<ServiceResultVoid> ChangePasswordAsync(ChangePasswordDto dto);
     }
 }

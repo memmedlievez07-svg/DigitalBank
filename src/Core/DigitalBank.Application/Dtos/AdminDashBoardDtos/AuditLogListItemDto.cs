@@ -17,5 +17,7 @@ namespace DigitalBank.Application.Dtos.AdminDashBoardDtos
         public string? CorrelationId { get; set; }
 
         public DateTime CreatedDate { get; set; }
+        public string? Fullname { get; set; }
+        public string? Email { get; set; }
     }
 }

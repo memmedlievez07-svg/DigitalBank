@@ -1,9 +1,12 @@
-﻿using DigitalBank.Application.Dtos.Message;
+﻿using DigitalBank.Application.Dtos;
+using DigitalBank.Application.Dtos.Message;
 using DigitalBank.Application.Interfaces;
 using DigitalBank.Application.Results;
 using DigitalBank.Application.UnitOfWork;
 using DigitalBank.Domain.Entities;
+using DigitalBank.Domain.Entities.Identity;
 using DigitalBank.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DigitalBank.Persistence.Services
@@ -14,17 +17,20 @@ namespace DigitalBank.Persistence.Services
         private readonly ICurrentUserContext _current;
         private readonly IChatPushService _chatPush;
         private readonly INotificationPushService _notifPush;
+        private readonly UserManager<AppUser> _userManager;
 
         public ChatService(
             IUnitOfWork uow,
             ICurrentUserContext current,
             IChatPushService chatPush,
-            INotificationPushService notifPush)
+            INotificationPushService notifPush,
+            UserManager<AppUser> userManager)
         {
             _uow = uow;
             _current = current;
             _chatPush = chatPush;
             _notifPush = notifPush;
+            _userManager = userManager;
         }
 
         public async Task<ServiceResultVoid> SendAsync(SendMessageDto dto)
@@ -32,63 +38,46 @@ namespace DigitalBank.Persistence.Services
             if (string.IsNullOrWhiteSpace(_current.UserId))
                 return ServiceResultVoid.Fail("Unauthorized", 401);
 
-            if (string.IsNullOrWhiteSpace(dto.ReceiverUserId))
-                return ServiceResultVoid.Fail("ReceiverUserId is required", 400);
-
-            if (string.IsNullOrWhiteSpace(dto.Message))
-                return ServiceResultVoid.Fail("Message is required", 400);
-
             var senderId = _current.UserId!;
-            var receiverId = dto.ReceiverUserId;
 
+            // 1. Mesaj obyektini yaradırıq
             var msg = new ChatMessage
             {
                 SenderUserId = senderId,
-                ReceiverUserId = receiverId,
+                ReceiverUserId = dto.ReceiverUserId,
                 Message = dto.Message,
                 IsRead = false,
-                ReadAt = null
+                CreatedDate = DateTime.UtcNow
             };
 
+            // 2. Bazaya yazırıq
             await _uow.ChatMessageWriteRepository.AddAsync(msg);
-
-            // 🔔 create notification for receiver
-            var notif = new Notification
-            {
-                UserId = receiverId,
-                Type = NotificationType.ChatMessage,
-                Title = "New message",
-                Body = dto.Message.Length > 80 ? dto.Message.Substring(0, 80) + "..." : dto.Message,
-                IsRead = false,
-                ReadAt = null
-            };
-
-            await _uow.NotificationWriteRepository.AddAsync(notif);
-
-            // ✅ 1 dəfə commit
             await _uow.CommitAsync();
 
-            // ✅ real-time chat push (if online)
-            await _chatPush.PushMessageAsync(receiverId, new
+            // 3. SignalR üçün DTO hazırlayırıq (Frontend bu formatı gözləyir)
+            var msgDto = new ChatMessageDto
             {
-                id = msg.Id,
-                senderUserId = senderId,
-                receiverUserId = receiverId,
-                message = msg.Message,
-                createdDate = msg.CreatedDate
-            });
+                Id = msg.Id,
+                SenderUserId = msg.SenderUserId,
+                ReceiverUserId = msg.ReceiverUserId,
+                Message = msg.Message,
+                CreatedDate = msg.CreatedDate,
+                IsRead = false
+            };
 
-            // ✅ real-time notification push + unread count trigger
-            await _notifPush.PushToUserAsync(receiverId, new
-            {
-                title = notif.Title,
-                body = notif.Body,
-                type = (int)notif.Type
-            });
+            // 4. REAL-TIME PUSH (Həm Chat, həm Notification)
+            // Alıcıya mesajı göndər
+            await _chatPush.PushMessageAsync(dto.ReceiverUserId, msgDto);
 
-            await _notifPush.PushUnreadCountChangedAsync(receiverId);
+            // Alıcıya bildiriş (notification) göndər ki, yuxarıda "pop-up" çıxsın
+            //await _notifPush.PushToUserAsync(dto.ReceiverUserId, new
+            //{
+            //    title = "Yeni mesaj",
+            //    body = dto.Message.Length > 30 ? dto.Message.Substring(0, 30) + "..." : dto.Message,
+            //    type = (int)NotificationType.ChatMessage
+            //});
 
-            return ServiceResultVoid.Ok("Message sent");
+            return ServiceResultVoid.Ok("Mesaj göndərildi");
         }
 
         public async Task<ServiceResult<PagedResult<ChatMessageDto>>> GetHistoryAsync(ChatHistoryFilterDto filter)
@@ -161,6 +150,64 @@ namespace DigitalBank.Persistence.Services
             }
 
             return ServiceResultVoid.Ok("Marked read");
+        }
+        public async Task<ServiceResult<List<UserBriefDto>>> GetMyConversationsAsync()
+        {
+            if (string.IsNullOrWhiteSpace(_current.UserId))
+                return ServiceResult<List<UserBriefDto>>.Fail("Unauthorized", 401);
+
+            var me = _current.UserId;
+
+            // 1. Mənim iştirak etdiyim mesajlardan unikal istifadəçi ID-lərini tapırıq
+            var userIds = await _uow.ChatMessageReadRepository.Table
+                .Where(m => m.SenderUserId == me || m.ReceiverUserId == me)
+                .Select(m => m.SenderUserId == me ? m.ReceiverUserId : m.SenderUserId)
+                .Distinct()
+                .ToListAsync();
+
+            var users = new List<UserBriefDto>();
+
+            foreach (var id in userIds)
+            {
+                var u = await _userManager.FindByIdAsync(id);
+                if (u != null)
+                {
+                    // Bu istifadəçidən mənə gələn və oxunmamış (IsRead == false) mesaj varammı?
+                    // Qeyd: ChatMessage modelində 'IsRead' sütununun olduğunu fərz edirəm
+                    bool unread = await _uow.ChatMessageReadRepository.Table
+                        .AnyAsync(m => m.SenderUserId == id && m.ReceiverUserId == me && !m.IsRead);
+
+                    users.Add(new UserBriefDto
+                    {
+                        Id = u.Id,
+                        FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        UserName = u.UserName,
+                        Email = u.Email,
+                        HasUnread = unread 
+                    });
+                }
+            }
+
+            return ServiceResult<List<UserBriefDto>>.Ok(users);
+        }
+
+   
+        public async Task<ServiceResultVoid> MarkAllReadAsync(string peerUserId)
+        {
+            var me = _current.UserId;
+            var messages = await _uow.ChatMessageReadRepository.Table
+                .Where(x => x.ReceiverUserId == me && x.SenderUserId == peerUserId && !x.IsRead)
+                .ToListAsync();
+
+            foreach (var m in messages)
+            {
+                m.IsRead = true;
+                m.ReadAt = DateTime.UtcNow;
+                _uow.ChatMessageWriteRepository.Update(m);
+            }
+            await _uow.CommitAsync();
+            return ServiceResultVoid.Ok();
         }
     }
 }

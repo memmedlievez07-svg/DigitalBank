@@ -26,115 +26,193 @@ namespace DigitalBank.Persistence.Services
             if (string.IsNullOrWhiteSpace(_current.UserId))
                 return ServiceResultVoid.Fail("Unauthorized", 401);
 
-            if (dto.Amount <= 0)
-                return ServiceResultVoid.Fail("Amount must be > 0", 400);
+            var senderId = _current.UserId!;
 
-            var me = _current.UserId!;
-
-            // tracking lazımdır
-            var senderWallet = await _uow.WalletReadRepository.Table
-                .FirstOrDefaultAsync(w => w.UserId == me);
-
-            if (senderWallet == null)
-                return ServiceResultVoid.Fail("Sender wallet not found", 404);
-
-            if (senderWallet.Status != WalletStatus.Active)
-                return ServiceResultVoid.Fail("Sender wallet is not active", 400);
-
-            // Qeyd: burada sən hazırda "ReceiverCardNumber" yazmısan, amma Id kimi istifadə edirsən.
-            // Səndə necədirsə elə saxladım:
-            var receiverWallet = await _uow.WalletReadRepository.Table
-                .FirstOrDefaultAsync(w => w.Id == dto.ReceiverCardNumber);
-
-            if (receiverWallet == null)
-                return ServiceResultVoid.Fail("Receiver wallet not found", 404);
-
-            if (receiverWallet.Status != WalletStatus.Active)
-                return ServiceResultVoid.Fail("Receiver wallet is not active", 400);
-
-            if (senderWallet.Id == receiverWallet.Id)
-                return ServiceResultVoid.Fail("Cannot transfer to same wallet", 400);
-
-            if (senderWallet.Balance < dto.Amount)
-                return ServiceResultVoid.Fail("Insufficient balance", 400);
-
-            await using var tr = await _uow.BeginTransactionAsync();
-
+            using var tr = await _uow.BeginTransactionAsync();
             try
             {
-                // balances
+                // 1. Cüzdanları tapırıq
+                var senderWallet = await _uow.WalletReadRepository.Table
+                    .FirstOrDefaultAsync(w => w.UserId == senderId);
+
+                var receiverWallet = await _uow.WalletReadRepository.Table
+                    .FirstOrDefaultAsync(w => w.CardNumber == dto.ReceiverCardNumber);
+
+                // 2. Validasiyalar
+                if (senderWallet == null) return ServiceResultVoid.Fail("Göndərən cüzdan tapılmadı", 404);
+                if (receiverWallet == null) return ServiceResultVoid.Fail("Qəbul edən cüzdan tapılmadı", 404);
+                if (senderWallet.Id == receiverWallet.Id) return ServiceResultVoid.Fail("Özünüzə pul göndərə bilməzsiniz", 400);
+                if (senderWallet.Balance < dto.Amount) return ServiceResultVoid.Fail("Balansınızda kifayət qədər vəsait yoxdur", 400);
+
+                // 3. Balansların yenilənməsi
                 senderWallet.Balance -= dto.Amount;
                 receiverWallet.Balance += dto.Amount;
 
                 _uow.WalletWriteRepository.Update(senderWallet);
                 _uow.WalletWriteRepository.Update(receiverWallet);
 
-                // transaction
+                // 4. Əməliyyatın (Transaction) qeydi - Dashboard-da görünməsi üçün
                 var tx = new BankTransaction
                 {
                     SenderWalletId = senderWallet.Id,
                     ReceiverWalletId = receiverWallet.Id,
                     Amount = dto.Amount,
-                    FeeAmount = 0m,
-                    Type = TransactionType.Transfer,
+                    ReferenceNo = $"TRF-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}",
+                    Description = dto.Description ?? "Pul köçürməsi",
                     Status = TransactionStatus.Completed,
-                    ReferenceNo = $"TRX-{Guid.NewGuid():N}".ToUpperInvariant(),
-                    Description = dto.Description
+                    Type = TransactionType.Transfer,
+                    CreatedDate = DateTime.UtcNow // Dashboard-da tarixə görə sıralama üçün vacibdir
                 };
-
                 await _uow.BankTransactionWriteRepository.AddAsync(tx);
 
-                // notif-lar (tx.Id SaveChanges-dən sonra gəlir, amma EF tracking ilə ilişdirəcək)
-                var incoming = new Notification
+                // 5. BİLDİRİŞİ BAZAYA YAZMAQ - Bildirişlər bölməsi boş qalmasın deyə
+                // Əgər Notification modelin varsa bu hissəni işlət:
+                var notification = new DigitalBank.Domain.Entities.Notification
                 {
                     UserId = receiverWallet.UserId,
-                    Type = NotificationType.IncomingTransfer,
-                    Title = "Incoming transfer",
-                    Body = $"You received {dto.Amount} {receiverWallet.Currency}",
+                    Title = "Mədaxil!",
+                    Body = $"{dto.Amount} AZN vəsait daxil oldu.", // Modelində adı 'Body' ola bilər
                     IsRead = false,
-                    RelatedTransactionId = null // aşağıda tx.Id ilə set edirik
+                    CreatedDate = DateTime.UtcNow
                 };
+                await _uow.NotificationWriteRepository.AddAsync(notification);
 
-                var outgoing = new Notification
-                {
-                    UserId = senderWallet.UserId,
-                    Type = NotificationType.OutgoingTransfer,
-                    Title = "Outgoing transfer",
-                    Body = $"You sent {dto.Amount} {senderWallet.Currency}",
-                    IsRead = false,
-                    RelatedTransactionId = null
-                };
-
-                await _uow.NotificationWriteRepository.AddAsync(incoming);
-                await _uow.NotificationWriteRepository.AddAsync(outgoing);
-
-                // 1 dəfə commit (hamısını yazır)
-                await _uow.CommitAsync();
-
-                // artıq tx.Id var
-                incoming.RelatedTransactionId = tx.Id;
-                outgoing.RelatedTransactionId = tx.Id;
-
-                _uow.NotificationWriteRepository.Update(incoming);
-                _uow.NotificationWriteRepository.Update(outgoing);
-
+                // 6. Dəyişiklikləri yadda saxla
                 await _uow.CommitAsync();
                 await tr.CommitAsync();
 
-                // Push (DB uğurlu olduqdan sonra)
-                await _push.PushToUserAsync(receiverWallet.UserId, new { title = incoming.Title, body = incoming.Body, type = (int)incoming.Type });
-                await _push.PushUnreadCountChangedAsync(receiverWallet.UserId);
+                // 7. Real-time Bildiriş (SignalR) - Pop-up üçün
+                await _push.PushToUserAsync(receiverWallet.UserId, new
+                {
+                    title = "Mədaxil!",
+                    body = $"{dto.Amount} AZN vəsait daxil oldu.",
+                    type = (int)NotificationType.IncomingTransfer
+                });
 
-                await _push.PushToUserAsync(senderWallet.UserId, new { title = outgoing.Title, body = outgoing.Body, type = (int)outgoing.Type });
-                await _push.PushUnreadCountChangedAsync(senderWallet.UserId);
-
-                return ServiceResultVoid.Ok("Transfer completed");
+                return ServiceResultVoid.Ok("Transfer uğurla tamamlandı");
             }
-            catch
+            catch (Exception ex)
             {
                 await tr.RollbackAsync();
-                return ServiceResultVoid.Fail("Transfer failed", 500);
+                return ServiceResultVoid.Fail("Transfer zamanı xəta: " + ex.Message, 500);
             }
         }
+        public async Task<ServiceResult<List<RecentTransferDto>>> GetRecentTransfersAsync()
+        {
+            if (string.IsNullOrWhiteSpace(_current.UserId))
+                return ServiceResult<List<RecentTransferDto>>.Fail("Unauthorized", 401);
+
+            var senderId = _current.UserId;
+
+            // 1. Mənim göndərdiyim transferləri tapırıq
+            // SenderWallet mənimdirsə, ReceiverWallet-in sahibini tapmalıyıq
+            var recentUsers = await _uow.BankTransactionReadRepository.Table
+                .Where(t => t.SenderWallet.UserId == senderId && t.Type == TransactionType.Transfer)
+                .OrderByDescending(t => t.CreatedDate)
+                .Select(t => new RecentTransferDto
+                {
+                    UserId = t.ReceiverWallet.UserId,
+                    FirstName = t.ReceiverWallet.User.FirstName,
+                    LastName = t.ReceiverWallet.User.LastName,
+                    CardNumber = t.ReceiverWallet.CardNumber
+                })
+                .Distinct() // Eyni adama çox göndərmişəmsə, adı 1 dəfə çıxsın
+                .Take(5)    // Son 5 nəfər kifayətdir
+                .ToListAsync();
+
+            return ServiceResult<List<RecentTransferDto>>.Ok(recentUsers);
+        }
+
+        // TransferService.cs daxilində GetDashboardDataAsync metodunu bu hissə ilə yenilə:
+        public async Task<ServiceResult<DashboardDto>> GetDashboardDataAsync()
+        {
+            var userId = _current.UserId;
+            if (string.IsNullOrEmpty(userId)) return ServiceResult<DashboardDto>.Fail("Unauthorized", 401);
+
+            var wallet = await _uow.WalletReadRepository.Table
+                .FirstOrDefaultAsync(w => w.UserId == userId);
+
+            if (wallet == null) return ServiceResult<DashboardDto>.Fail("Cüzdan tapılmadı", 404);
+
+            var transactions = await _uow.BankTransactionReadRepository.Table
+                .Include(t => t.SenderWallet)
+                .Include(t => t.ReceiverWallet)
+                .Where(t => t.SenderWalletId == wallet.Id || t.ReceiverWalletId == wallet.Id)
+                .OrderByDescending(t => t.CreatedDate) // Bazadakı sütun adın CreatedDate-dir
+                .Take(10) // 5 yox, 10 dənə gətirək ki siyahı dolsun
+                .ToListAsync();
+
+            var dashboard = new DashboardDto
+            {
+                TotalBalance = wallet.Balance,
+                Currency = wallet.Currency ?? "AZN",
+                RecentTransactions = transactions.Select(t => new TransactionListItemDto
+                {
+                    Id = t.Id,
+                    ReferenceNo = t.ReferenceNo,
+                    Amount = t.Amount,
+                    Type = (int)t.Type,
+                    Status = (int)t.Status,
+                    Description = t.Description,
+                    CreatedDateUtc = t.CreatedDate, // Frontend bu sahəni gözləyir
+                    SenderWalletId = t.SenderWalletId,
+                    ReceiverWalletId = t.ReceiverWalletId
+                }).ToList()
+            };
+
+            return ServiceResult<DashboardDto>.Ok(dashboard);
+        }
+
+        public async Task<ServiceResult<List<TransactionDetailDto>>> GetTransactionHistoryAsync()
+        {
+            var userId = _current.UserId;
+            if (string.IsNullOrEmpty(userId))
+                return ServiceResult<List<TransactionDetailDto>>.Fail("Unauthorized", 401);
+
+            // 1. İstifadəçinin cüzdanını tapırıq
+            var wallet = await _uow.WalletReadRepository.Table
+                .FirstOrDefaultAsync(w => w.UserId == userId);
+
+            if (wallet == null)
+                return ServiceResult<List<TransactionDetailDto>>.Fail("Cüzdan tapılmadı", 404);
+
+            // 2. Bütün əməliyyatları (həm göndərdiyi, həm aldığı) çəkirik
+            var transactions = await _uow.BankTransactionReadRepository.Table
+                .Include(t => t.SenderWallet).ThenInclude(w => w.User)
+                .Include(t => t.ReceiverWallet).ThenInclude(w => w.User)
+                .Where(t => t.SenderWalletId == wallet.Id || t.ReceiverWalletId == wallet.Id)
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
+
+            // 3. DTO-ya çeviririk (Mapping)
+            var result = transactions.Select(t => {
+                // 1. Mən göndərənəm?
+                bool isOutgoing = t.SenderWalletId == wallet.Id;
+
+                // 2. Qarşı tərəf kimdir? 
+                // Mən göndərirəmsə qarşı tərəf Receiver-dir, mən alıramsa Sender-dir.
+                var counterpartyWallet = isOutgoing ? t.ReceiverWallet : t.SenderWallet;
+
+                return new TransactionDetailDto
+                {
+                    Id = t.Id,
+                    Amount = t.Amount,
+                    Description = t.Description ?? "Pul köçürməsi",
+                    ReferenceNo = t.ReferenceNo ?? "REF-000",
+                    CreatedDate = t.CreatedDate,
+                    Type = isOutgoing ? 1 : 0,
+
+                    // NULL CHECK - Ən kritik hissə buradır
+                    CounterpartyName = counterpartyWallet != null && counterpartyWallet.User != null
+                        ? $"{counterpartyWallet.User.FirstName} {counterpartyWallet.User.LastName}"
+                        : "Sistem Əməliyyatı", 
+
+                    CounterpartyCard = counterpartyWallet?.CardNumber ?? "N/A"
+                };
+            }).ToList();
+
+            return ServiceResult<List<TransactionDetailDto>>.Ok(result);
+        }
+
     }
 }

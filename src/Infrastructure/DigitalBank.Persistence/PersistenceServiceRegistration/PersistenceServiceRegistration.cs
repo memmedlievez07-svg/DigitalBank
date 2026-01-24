@@ -57,6 +57,7 @@ namespace DigitalBank.Persistence.PersistenceServiceRegistration
             services.AddScoped<IAdminDashboardService, AdminDashboardService>();
             services.AddScoped<IAdminNotificationService,AdminNotificationService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IStripePaymentService,StripePaymentService>();
 
 
 

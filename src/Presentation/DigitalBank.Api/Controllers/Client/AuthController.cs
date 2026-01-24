@@ -68,5 +68,12 @@ namespace DigitalBank.Api.Controllers.Client
             _cookies.DeleteRefreshTokenCookie(Response);
             return FromResult(result);
         }
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            // AuthService-dəki metodu çağırırıq
+            var result = await _auth.ChangePasswordAsync(dto);
+            return FromResult(result);
+        }
     }
 }

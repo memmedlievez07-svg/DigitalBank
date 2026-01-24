@@ -26,7 +26,10 @@ namespace DigitalBank.Api.Controllers.Client
             => FromResult(await _service.GetUnreadCountAsync());
 
         [HttpPatch("{id:int}/read")]
-        public async Task<IActionResult> MarkRead([FromRoute] int id)
-            => FromResult(await _service.MarkReadAsync(id));
+        [HttpPost("mark-all-as-read")] // 
+        public async Task<IActionResult> MarkAllAsRead()
+        {
+            return FromResult(await _service.MarkAllAsReadAsync());
+        }
     }
 }

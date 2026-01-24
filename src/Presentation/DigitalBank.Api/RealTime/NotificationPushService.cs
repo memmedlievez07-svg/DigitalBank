@@ -13,16 +13,21 @@ namespace DigitalBank.Api.Realtime
             _hub = hub;
         }
 
-        public async Task PushToUserAsync(string userId, object payload)
+        public async Task PushToUserAsync(string userId, object notification)
         {
-            await _hub.Clients.Group(userId)
-                .SendAsync("notification:new", payload);
+            // Clients.User istifadə etmək ən təhlükəsizidir (IUserIdProvider varsa)
+            await _hub.Clients.User(userId).SendAsync("ReceiveNotification", notification);
         }
 
         public async Task PushUnreadCountChangedAsync(string userId)
         {
             await _hub.Clients.Group(userId)
                 .SendAsync("notification:unreadCountChanged");
+        }
+        public async Task PushToAllAsync(object payload)
+        {
+            // Bu sətir serverdəki bütün qoşulu istifadəçilərə tək bir əmrlə mesaj göndərir
+            await _hub.Clients.All.SendAsync("ReceiveNotification", payload);
         }
     }
 }

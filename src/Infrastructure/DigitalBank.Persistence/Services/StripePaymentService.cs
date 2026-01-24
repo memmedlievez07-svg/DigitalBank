@@ -29,109 +29,164 @@ namespace DigitalBank.Persistence.Services
             _push = push;
         }
 
-        public async Task<ServiceResult<string>> CreateCheckoutSessionAsync(decimal amount, string currency = "azn")
+        public async Task<ServiceResult<object>> CreateCheckoutSessionAsync(decimal amount, string currency = "azn")
         {
+            // 1. İstifadəçi yoxlanışı
             if (string.IsNullOrWhiteSpace(_current.UserId))
-                return ServiceResult<string>.Fail("Unauthorized", 401);
+                return ServiceResult<object>.Fail("Unauthorized", 401);
 
+            // 2. Məbləğ yoxlanışı
             if (amount <= 0)
-                return ServiceResult<string>.Fail("Amount must be greater than 0", 400);
-
-            // Minimum və Maximum limit
-            if (amount < 1)
-                return ServiceResult<string>.Fail("Minimum top-up amount is 1 AZN", 400);
-
-            if (amount > 50000)
-                return ServiceResult<string>.Fail("Maximum top-up amount is 50,000 AZN", 400);
-
-            var userId = _current.UserId!;
-
-            // User wallet-i yoxla
-            var wallet = await _uow.WalletReadRepository.Table
-                .FirstOrDefaultAsync(w => w.UserId == userId);
-
-            if (wallet == null)
-                return ServiceResult<string>.Fail("Wallet not found", 404);
-
-            if (wallet.Status != WalletStatus.Active)
-                return ServiceResult<string>.Fail("Wallet is not active", 400);
+                return ServiceResult<object>.Fail("Məbləğ 0-dan böyük olmalıdır", 400);
 
             try
             {
-                // Stripe Checkout Session yaradırıq
-                var domain = _config["ApiBaseUrl"] ?? "https://localhost:7055";
-
                 var options = new SessionCreateOptions
                 {
                     PaymentMethodTypes = new List<string> { "card" },
                     LineItems = new List<SessionLineItemOptions>
+            {
+                new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
                     {
-                        new SessionLineItemOptions
+                        UnitAmount = (long)(amount * 100), // Qəpiyə çevrilmə
+                        Currency = currency.ToLower(),
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
-                            PriceData = new SessionLineItemPriceDataOptions
-                            {
-                                Currency = currency.ToLower(),
-                                UnitAmount = (long)(amount * 100), // Stripe qəpik istəyir
-                                ProductData = new SessionLineItemPriceDataProductDataOptions
-                                {
-                                    Name = "Wallet Top-Up",
-                                    Description = $"Add {amount} {currency.ToUpper()} to your wallet",
-                                }
-                            },
-                            Quantity = 1
-                        }
+                            Name = "DigitalBank Balans Artımı",
+                            Description = $"{amount} {currency.ToUpper()} məbləğində yükləmə"
+                        },
                     },
+                    Quantity = 1,
+                },
+            },
                     Mode = "payment",
-                    SuccessUrl = $"{domain}/api/client/payment/success?session_id={{CHECKOUT_SESSION_ID}}",
-                    CancelUrl = $"{domain}/api/client/payment/cancel",
-                    ClientReferenceId = userId, // User-i identify etmək üçün
+                    // SuccessUrl və CancelUrl config-dən götürülür
+                    SuccessUrl = _config["Stripe:SuccessUrl"] + "?session_id={CHECKOUT_SESSION_ID}",
+                    CancelUrl = _config["Stripe:CancelUrl"],
                     Metadata = new Dictionary<string, string>
-                    {
-                        { "userId", userId },
-                        { "walletId", wallet.Id.ToString() },
-                        { "amount", amount.ToString() },
-                        { "currency", currency }
-                    }
+            {
+                { "UserId", _current.UserId }, // Webhook-da balansı artırmaq üçün vacibdir
+                { "Amount", amount.ToString() }
+            }
                 };
 
                 var service = new SessionService();
-                var session = await service.CreateAsync(options);
+                Session session = await service.CreateAsync(options);
 
-                return ServiceResult<string>.Ok(session.Url, "", 200);
+                // Frontend-in gözlədiyi formatda (object) qaytarırıq
+                return ServiceResult<object>.Ok(new
+                {
+                    SessionUrl = session.Url,
+                    SessionId = session.Id
+                }, "Checkout session created", 200);
             }
             catch (StripeException ex)
             {
-                return ServiceResult<string>.Fail($"Stripe error: {ex.Message}", 500);
+                // Stripe tərəfindən gələn xüsusi xətalar (məs: yanlış API key)
+                return ServiceResult<object>.Fail($"Stripe Xətası: {ex.Message}", 500);
             }
             catch (Exception ex)
             {
-                return ServiceResult<string>.Fail($"Error creating checkout session: {ex.Message}", 500);
+                return ServiceResult<object>.Fail($"Gözlənilməz xəta: {ex.Message}", 500);
             }
         }
 
-        public async Task<ServiceResultVoid> HandleWebhookAsync(string jsonPayload, string stripeSignature)
+        public async Task<ServiceResultVoid> HandleWebhookAsync(string json, string stripeSignature)
         {
             var webhookSecret = _config["Stripe:WebhookSecret"];
-
-            if (string.IsNullOrWhiteSpace(webhookSecret))
-            {
-                // Development-də webhook secret olmaya bilər, amma production-da mütləq olmalıdır
-                return await ProcessEventWithoutSignatureAsync(jsonPayload);
-            }
-
             try
             {
-                var stripeEvent = EventUtility.ConstructEvent(
-                    jsonPayload,
-                    stripeSignature,
-                    webhookSecret
-                );
+                // Stripe'dan gələn datanı doğrulayırıq
+                var stripeEvent = EventUtility.ConstructEvent(json, stripeSignature, webhookSecret);
 
-                return await ProcessStripeEventAsync(stripeEvent);
+                // 'Events' xətasını buradakı 'Stripe.Events' ilə həll edirik
+                if (stripeEvent.Type == "checkout.session.completed")
+                {
+                    var session = stripeEvent.Data.Object as Stripe.Checkout.Session;
+
+                    // Metadata-dan UserId-ni alırıq (Session yaradanda qoyduğumuz)
+                    var userId = session?.Metadata["UserId"];
+                    var amount = (decimal)(session?.AmountTotal ?? 0) / 100;
+
+                    if (string.IsNullOrEmpty(userId))
+                        return ServiceResultVoid.Fail("UserId not found in session metadata", 400);
+
+                    // İndi yeni yazdığımız overload-u çağırırıq
+                    return await CompleteTopUpAsync(userId, amount);
+                }
+
+                return ServiceResultVoid.Ok();
             }
-            catch (StripeException)
+            catch (StripeException ex)
             {
-                return ServiceResultVoid.Fail("Invalid signature", 400);
+                return ServiceResultVoid.Fail($"Stripe Webhook Error: {ex.Message}", 400);
+            }
+        }
+
+        // BU METODU YENİLƏDİK - İndi həm SessionId, həm də birbaşa UserId/Amount qəbul edə bilir
+        public async Task<ServiceResultVoid> CompleteTopUpAsync(string userId, decimal amount)
+        {
+            using var tr = await _uow.BeginTransactionAsync();
+            try
+            {
+                // 1. Cüzdanı tapırıq
+                var wallet = await _uow.WalletReadRepository.Table
+                    .FirstOrDefaultAsync(w => w.UserId == userId);
+
+                if (wallet == null)
+                    return ServiceResultVoid.Fail("Wallet not found", 404);
+
+                // 2. Balansı artırırıq
+                wallet.Balance += amount;
+                _uow.WalletWriteRepository.Update(wallet);
+
+                // 3. Bank əməliyyatı (Transaction) yaradırıq
+                var tx = new BankTransaction
+                {
+                    ReceiverWalletId = wallet.Id,
+                    Amount = amount,
+                    Type = TransactionType.TopUp,
+                    Status = TransactionStatus.Completed,
+                    ReferenceNo = $"STP-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}",
+                    Description = "Stripe vasitəsilə balans artımı"
+                };
+                await _uow.BankTransactionWriteRepository.AddAsync(tx);
+                await _uow.CommitAsync();
+
+                // 4. Bildiriş yaradırıq
+                var notification = new Notification
+                {
+                    UserId = userId,
+                    Title = "Balans artırıldı",
+                    Body = $"{amount} {wallet.Currency} məbləğində vəsait balansınıza yükləndi.",
+                    Type = NotificationType.TopUp,
+                    IsRead = false,
+                    CreatedDate = DateTime.UtcNow,
+                    RelatedTransactionId = tx.Id
+                };
+                await _uow.NotificationWriteRepository.AddAsync(notification);
+                await _uow.CommitAsync();
+
+                await tr.CommitAsync();
+
+                // 5. SignalR ilə canlı məlumat göndəririk
+                await _push.PushToUserAsync(userId, new
+                {
+                    title = notification.Title,
+                    body = notification.Body,
+                    type = (int)notification.Type,
+                    amount = amount // Frontend balansı yeniləsin deyə
+                });
+                await _push.PushUnreadCountChangedAsync(userId);
+
+                return ServiceResultVoid.Ok("Top-up completed successfully");
+            }
+            catch (Exception ex)
+            {
+                await tr.RollbackAsync();
+                return ServiceResultVoid.Fail($"Failed to complete top-up: {ex.Message}", 500);
             }
         }
 

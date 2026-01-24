@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalBank.Api.Controllers.Admin
 {
+    [ApiController]
     [Authorize(Roles = "Admin")]
     [Route("api/admin/users")]
     public class AdminUsersController : ApiControllerBase
@@ -32,5 +33,11 @@ namespace DigitalBank.Api.Controllers.Admin
         [HttpPut("{userId}/role")]
         public async Task<IActionResult> SetRole([FromRoute] string userId, [FromBody] SetUserRoleRequestDto dto)
             => FromResult(await _service.SetRoleAsync(userId, dto));
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string email)
+    => FromResult(await _service.SearchUsersByEmailAsync(email));
+
+
     }
 }

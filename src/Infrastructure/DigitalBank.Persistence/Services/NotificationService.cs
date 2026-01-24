@@ -111,5 +111,31 @@ namespace DigitalBank.Persistence.Services
 
             return ServiceResult<int>.Ok(count);
         }
+        public async Task<ServiceResultVoid> MarkAllAsReadAsync()
+        {
+            if (string.IsNullOrWhiteSpace(_current.UserId))
+                return ServiceResultVoid.Fail("Unauthorized", 401);
+
+            var userId = _current.UserId!;
+
+            // İstifadəçinin hələ oxunmamış bütün bildirişlərini tapırıq
+            var unreadNotifications = await _uow.NotificationWriteRepository.Table
+                .Where(n => n.UserId == userId && !n.IsRead)
+                .ToListAsync();
+
+            if (unreadNotifications.Any())
+            {
+                foreach (var n in unreadNotifications)
+                {
+                    n.IsRead = true;
+                    n.ReadAt = DateTime.UtcNow;
+                }
+
+                _uow.NotificationWriteRepository.UpdateRange(unreadNotifications);
+                await _uow.CommitAsync();
+            }
+
+            return ServiceResultVoid.Ok("Bütün bildirişlər oxundu");
+        }
     }
 }

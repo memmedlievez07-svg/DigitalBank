@@ -40,6 +40,10 @@ namespace DigitalBank.Persistence.Repositories
         {
             Table.Update(entity);
         }
+        public void UpdateRange(List<T> entities)
+        {
+            Table.UpdateRange(entities);
+        }
 
 
     }

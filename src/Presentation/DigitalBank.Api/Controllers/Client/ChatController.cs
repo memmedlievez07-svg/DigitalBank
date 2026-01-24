@@ -25,8 +25,29 @@ namespace DigitalBank.Api.Controllers.Client
         public async Task<IActionResult> History([FromQuery] ChatHistoryFilterDto filter)
             => FromResult(await _service.GetHistoryAsync(filter));
 
+        // Tək bir mesajı oxundu etmək üçün (Mövcud idi)
         [HttpPatch("{id:int}/read")]
-        public async Task<IActionResult> MarkRead([FromRoute] int id)
+        public async Task<IActionResult> MarkReadAsync([FromRoute] int id)
             => FromResult(await _service.MarkReadAsync(id));
+
+        // --- YENİ ƏLAVƏ EDİLMƏLİ OLAN METOD ---
+        // Bütün söhbəti (peerUserId ilə olan) oxundu etmək üçün
+        [HttpPost("mark-all-read")]
+        public async Task<IActionResult> MarkAllRead([FromQuery] string peerUserId)
+        {
+            var result = await _service.MarkAllReadAsync(peerUserId);
+            return FromResult(result);
+        }
+
+        [HttpGet("conversations")]
+        public async Task<IActionResult> GetConversations()
+        {
+            var result = await _service.GetMyConversationsAsync();
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }

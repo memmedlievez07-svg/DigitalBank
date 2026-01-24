@@ -4,6 +4,7 @@ using DigitalBank.Application.Results;
 using DigitalBank.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigitalBank.Persistence.Services
 {
@@ -55,11 +56,12 @@ namespace DigitalBank.Persistence.Services
             if (user == null)
                 return ServiceResultVoid.Fail("User not found", 404);
 
+            // Frontend-dən gələn yeni sahələri mənimsədirik
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
-            user.FatherName = dto.FatherName;
-            user.Address = dto.Address;
-            user.Age = dto.Age;
+            user.FatherName = dto.FatherName; // Sənin AppUser-ində bu sahə var
+            user.Address = dto.Address;       // Sənin AppUser-ində bu sahə var
+            user.Age = dto.Age;               // Sənin AppUser-ində bu sahə var
 
             var res = await _userManager.UpdateAsync(user);
             if (!res.Succeeded)
@@ -97,5 +99,29 @@ namespace DigitalBank.Persistence.Services
                 return ServiceResult<AvatarUploadResponseDto>.Fail(ex.Message, 400);
             }
         }
+        public async Task<ServiceResult<List<UserBriefDto>>> SearchUsersAsync(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query) || query.Length < 3)
+                return ServiceResult<List<UserBriefDto>>.Ok(new List<UserBriefDto>());
+
+            var users = await _userManager.Users
+                .Where(u => u.Id != _current.UserId &&
+                           (u.FirstName.Contains(query) ||
+                            u.LastName.Contains(query) ||
+                            u.Email.Contains(query)))
+                .Take(10) // Performans üçün cəmi 10 nəfər gətiririk
+                .Select(u => new UserBriefDto
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    UserName = u.UserName,
+                    Email = u.Email
+                })
+                .ToListAsync();
+
+            return ServiceResult<List<UserBriefDto>>.Ok(users);
+        }
+
     }
 }

@@ -6,6 +6,7 @@
         Login = 2,
         Refresh = 3,
         Logout = 4,
+        Security = 5,
 
         Transfer = 10,
         TopUp = 11,

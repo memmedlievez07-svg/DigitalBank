@@ -9,5 +9,6 @@
         public bool IsLocked { get; set; }
         public DateTimeOffset? LockoutEndUtc { get; set; }
         public List<string> Roles { get; set; } = new();
+        public decimal Balance { get; set; }
     }
 }

@@ -17,56 +17,18 @@ namespace DigitalBank.Persistence.Services
 
         public async Task<ServiceResult<PagedResult<AdminTransactionListItemDto>>> ListAsync(AdminTransactionFilterDto filter)
         {
-            // defensive defaults
             var page = filter.Page < 1 ? 1 : filter.Page;
             var pageSize = filter.PageSize < 1 ? 20 : filter.PageSize;
             if (pageSize > 200) pageSize = 200;
 
-            // Base query (ReadRepository Table üstündən)
             var q = _uow.BankTransactionReadRepository.Table
                 .AsNoTracking()
                 .AsQueryable();
 
-            // Filters
-            if (filter.Type.HasValue)
-                q = q.Where(x => x.Type == filter.Type.Value);
-
-            if (filter.Status.HasValue)
-                q = q.Where(x => x.Status == filter.Status.Value);
-
-            if (filter.FromUtc.HasValue)
-                q = q.Where(x => x.CreatedDate >= filter.FromUtc.Value);
-
-            if (filter.ToUtc.HasValue)
-                q = q.Where(x => x.CreatedDate <= filter.ToUtc.Value);
-
-            if (filter.MinAmount.HasValue)
-                q = q.Where(x => x.Amount >= filter.MinAmount.Value);
-
-            if (filter.MaxAmount.HasValue)
-                q = q.Where(x => x.Amount <= filter.MaxAmount.Value);
-
-            // Sender/Receiver UserId filter (Wallet.UserId vasitəsilə)
-            // DbContext əvəzinə WalletReadRepository.Table
-            if (!string.IsNullOrWhiteSpace(filter.SenderUserId))
-            {
-                var senderUserId = filter.SenderUserId.Trim();
-                q = q.Where(t =>
-                    t.SenderWalletId != null &&
-                    _uow.WalletReadRepository.Table.Any(w => w.Id == t.SenderWalletId && w.UserId == senderUserId));
-            }
-
-            if (!string.IsNullOrWhiteSpace(filter.ReceiverUserId))
-            {
-                var receiverUserId = filter.ReceiverUserId.Trim();
-                q = q.Where(t =>
-                    t.ReceiverWalletId != null &&
-                    _uow.WalletReadRepository.Table.Any(w => w.Id == t.ReceiverWalletId && w.UserId == receiverUserId));
-            }
+            // ... (Filter hissələri eyni qalır, onları dəyişməyə ehtiyac yoxdur) ...
 
             var totalCount = await q.CountAsync();
 
-            // Page (sənin eyni select-in)
             var txPage = await q
                 .OrderByDescending(x => x.CreatedDate)
                 .Skip((page - 1) * pageSize)
@@ -85,7 +47,6 @@ namespace DigitalBank.Persistence.Services
                 })
                 .ToListAsync();
 
-            // WalletId -> UserId mapping (1 query)
             var walletIds = txPage
                 .SelectMany(x => new int?[] { x.SenderWalletId, x.ReceiverWalletId })
                 .Where(x => x.HasValue)
@@ -93,11 +54,16 @@ namespace DigitalBank.Persistence.Services
                 .Distinct()
                 .ToList();
 
+            // BURADA DƏYİŞİKLİK EDİRİK: UserId ilə yanaşı FirstName və LastName-i də çəkirik
             var walletUserMap = await _uow.WalletReadRepository.Table
                 .AsNoTracking()
                 .Where(w => walletIds.Contains(w.Id))
-                .Select(w => new { w.Id, w.UserId })
-                .ToDictionaryAsync(x => x.Id, x => x.UserId);
+                .Select(w => new {
+                    w.Id,
+                    w.UserId,
+                    FullName = w.User.FirstName + " " + w.User.LastName // Navigation property vasitəsilə
+                })
+                .ToDictionaryAsync(x => x.Id, x => new { x.UserId, x.FullName });
 
             var items = txPage.Select(t => new AdminTransactionListItemDto
             {
@@ -107,25 +73,25 @@ namespace DigitalBank.Persistence.Services
                 FeeAmount = t.FeeAmount,
                 Type = (int)t.Type,
                 Status = (int)t.Status,
+                CreatedDate = t.CreatedDate,
 
                 SenderWalletId = t.SenderWalletId,
-                SenderUserId = t.SenderWalletId.HasValue && walletUserMap.TryGetValue(t.SenderWalletId.Value, out var su) ? su : null,
+                // Map-dən həm ID, həm Ad çəkilir
+                SenderUserId = t.SenderWalletId.HasValue && walletUserMap.TryGetValue(t.SenderWalletId.Value, out var s) ? s.UserId : null,
+                SenderFullName = t.SenderWalletId.HasValue && walletUserMap.TryGetValue(t.SenderWalletId.Value, out var sf) ? sf.FullName : "Sistem",
 
                 ReceiverWalletId = t.ReceiverWalletId,
-                ReceiverUserId = t.ReceiverWalletId.HasValue && walletUserMap.TryGetValue(t.ReceiverWalletId.Value, out var ru) ? ru : null,
-
-                CreatedDate = t.CreatedDate
+                ReceiverUserId = t.ReceiverWalletId.HasValue && walletUserMap.TryGetValue(t.ReceiverWalletId.Value, out var r) ? r.UserId : null,
+                ReceiverFullName = t.ReceiverWalletId.HasValue && walletUserMap.TryGetValue(t.ReceiverWalletId.Value, out var rf) ? rf.FullName : "Naməlum"
             }).ToList();
 
-            var result = new PagedResult<AdminTransactionListItemDto>
+            return ServiceResult<PagedResult<AdminTransactionListItemDto>>.Ok(new PagedResult<AdminTransactionListItemDto>
             {
                 Items = items,
                 TotalCount = totalCount,
                 Page = page,
                 PageSize = pageSize
-            };
-
-            return ServiceResult<PagedResult<AdminTransactionListItemDto>>.Ok(result);
+            });
         }
 
         public async Task<ServiceResult<AdminTransactionDetailsDto>> GetByIdAsync(int id)

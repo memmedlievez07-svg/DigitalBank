@@ -322,7 +322,9 @@ namespace DigitalBank.Persistence.Services
                     UserName = user.UserName ?? user.Email ?? "",
                     Email = user.Email ?? "",
                     FirstName = user.FirstName,
-                    LastName = user.LastName
+                    LastName = user.LastName,
+                    AvatarUrl = user.AvatarUrl
+
                 }
             };
 
@@ -402,7 +404,8 @@ namespace DigitalBank.Persistence.Services
                     UserName = user.UserName ?? user.Email ?? "",
                     Email = user.Email ?? "",
                     FirstName = user.FirstName,
-                    LastName = user.LastName
+                    LastName = user.LastName,
+                    AvatarUrl = user.AvatarUrl
                 }
             };
 
@@ -437,6 +440,30 @@ namespace DigitalBank.Persistence.Services
                 overrideUserId: rt.UserId);
 
             return ServiceResultVoid.Ok("Çıxış edildi.");
+        }
+        public async Task<ServiceResultVoid> ChangePasswordAsync(ChangePasswordDto dto)
+        {
+            // 1. İstifadəçinin daxil olub-olmadığını yoxlayırıq
+            // _current.UserId sənin ICurrentUserContext-indən gəlir
+            var userId = _userManager.GetUserId(_signInManager.Context.User);
+            // Və ya birbaşa: if (string.IsNullOrEmpty(_current.UserId))
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return ServiceResultVoid.Fail("İstifadəçi tapılmadı", 404);
+
+            // 2. Identity-nin öz metodu ilə şifrəni dəyişirik
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description).ToList();
+                return ServiceResultVoid.Fail(errors, "Şifrə dəyişdirilə bilmədi", 400);
+            }
+
+            // 3. Audit log yazırıq (sənin AuditLogService-in var)
+            await _audit.WriteAsync(AuditActionType.Security, true, "İstifadəçi şifrəsini dəyişdi");
+
+            return ServiceResultVoid.Ok("Şifrəniz uğurla dəyişdirildi");
         }
 
         private static string GenerateRefreshTokenRaw()

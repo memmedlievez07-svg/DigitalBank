@@ -18,5 +18,7 @@
         public string? ReceiverUserId { get; set; }
 
         public DateTime CreatedDate { get; set; }
+        public string? SenderFullName { get; set; }
+        public string? ReceiverFullName { get; set; }
     }
 }

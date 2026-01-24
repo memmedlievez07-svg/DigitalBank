@@ -1,24 +1,45 @@
-﻿using DigitalBank.Api.Controllers.Base;
-using DigitalBank.Application.Dtos;
+﻿using Microsoft.AspNetCore.Mvc;
 using DigitalBank.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using DigitalBank.Application.Dtos;
 
-namespace DigitalBank.Api.Controllers.Client
+namespace DigitalBank.WebAPI.Controllers
 {
-    [Authorize]
-    [Route("api/client/transfer")]
-    public class TransferController : ApiControllerBase
+    [ApiController]
+    // Frontend '/api/client/transfer' gözləyir:
+    [Route("api/client/[controller]")]
+    public class TransferController : ControllerBase
     {
-        private readonly ITransferService _service;
+        private readonly ITransferService _transferService;
 
-        public TransferController(ITransferService service)
+        public TransferController(ITransferService transferService)
         {
-            _service = service;
+            _transferService = transferService;
         }
 
-        [HttpPost]
+        // Frontend '/send' axtarır:
+        [HttpPost("send")]
         public async Task<IActionResult> Transfer([FromBody] TransferRequestDto dto)
-            => FromResult(await _service.TransferAsync(dto));
+        {
+            var result = await _transferService.TransferAsync(dto);
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
+        // Frontend '/recent' axtarır:
+        [HttpGet("recent")]
+        public async Task<IActionResult> GetRecent()
+        {
+            var result = await _transferService.GetRecentTransfersAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistory()
+        {
+            var result = await _transferService.GetTransactionHistoryAsync();
+            return Ok(result);
+        }
     }
 }

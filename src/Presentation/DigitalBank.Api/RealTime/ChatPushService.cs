@@ -14,6 +14,11 @@ namespace DigitalBank.Api.Realtime
         }
 
         public Task PushMessageAsync(string receiverUserId, object payload)
-            => _hub.Clients.Group(receiverUserId).SendAsync("chat:newMessage", payload);
+    // Frontend-də asan tutmaq üçün adı sadələşdiririk
+    => _hub.Clients.Group(receiverUserId).SendAsync("ReceiveMessage", payload);
+
+
+
+
     }
 }

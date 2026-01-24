@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalBank.Api.Controllers.Admin
 {
+    [ApiController]
     [Authorize(Roles = "Admin")]
     [Route("api/admin/dashboard")]
     public class DashboardController : ApiControllerBase

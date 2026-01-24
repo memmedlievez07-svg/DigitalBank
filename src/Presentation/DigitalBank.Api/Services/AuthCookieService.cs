@@ -11,8 +11,10 @@ namespace DigitalBank.Api.Services
             var options = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false,              // localhost HTTP üçün
-                SameSite = SameSiteMode.Lax, // local-da rahat
+                // HTTPS (localhost:7055) istifadə etdiyin üçün Secure mütləq true olmalıdır
+                Secure = true,
+                // Fərqli portlar (5173 -> 7055) üçün None mütləqdir
+                SameSite = SameSiteMode.None,
                 Expires = dto.RefreshTokenExpiresAtUtc,
                 Path = "/"
             };

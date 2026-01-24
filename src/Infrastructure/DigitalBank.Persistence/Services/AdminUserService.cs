@@ -1,9 +1,11 @@
 ﻿using DigitalBank.Application.Dtos;
+using DigitalBank.Application.Dtos.AdminDashBoardDtos;
 using DigitalBank.Application.Interfaces;
 using DigitalBank.Application.Results;
 using DigitalBank.Domain.Entities.Identity;
 using DigitalBank.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigitalBank.Persistence.Services
 {
@@ -25,23 +27,31 @@ namespace DigitalBank.Persistence.Services
 
         public async Task<ServiceResult<List<AdminUserListItemDto>>> GetUsersAsync()
         {
-            var users = _userManager.Users.ToList();
-            var list = new List<AdminUserListItemDto>();
-
-            foreach (var u in users)
+            // 1. Birbaşa Select atırıq. Bu zaman EF Core arxa planda avtomatik Join edir.
+            // Include yazmağa ehtiyac qalmır və EF asılılığı yaranmır.
+            var userQuery = _userManager.Users.Select(u => new AdminUserListItemDto
             {
-                var roles = await _userManager.GetRolesAsync(u);
+                Id = u.Id,
+                Email = u.Email ?? "",
+                UserName = u.UserName ?? "",
+                EmailConfirmed = u.EmailConfirmed,
+                LockoutEndUtc = u.LockoutEnd,
+                IsLocked = u.LockoutEnd.HasValue && u.LockoutEnd.Value.UtcDateTime > DateTime.UtcNow,
 
-                list.Add(new AdminUserListItemDto
-                {
-                    Id = u.Id,
-                    Email = u.Email ?? "",
-                    UserName = u.UserName ?? "",
-                    EmailConfirmed = u.EmailConfirmed,
-                    LockoutEndUtc = u.LockoutEnd,
-                    IsLocked = u.LockoutEnd.HasValue && u.LockoutEnd.Value.UtcDateTime > DateTime.UtcNow,
-                    Roles = roles.ToList()
-                });
+                // Wallet üzərindən balansı çəkirik. Select daxilində olduğu üçün EF bunu başa düşür.
+                Balance = u.Wallet != null ? u.Wallet.Balance : 0,
+
+                // Qeyd: GetRolesAsync-i burada birbaşa Select daxilində istifadə edə bilməzsən (SQL-ə çevrilmir)
+            });
+
+            var list = userQuery.ToList();
+
+            // 2. Rolları yaddaşa yüklədikdən sonra foreach ilə əlavə edirik
+            foreach (var dto in list)
+            {
+                var user = _userManager.Users.First(x => x.Id == dto.Id);
+                var roles = await _userManager.GetRolesAsync(user);
+                dto.Roles = roles.ToList();
             }
 
             return ServiceResult<List<AdminUserListItemDto>>.Ok(list);
@@ -163,6 +173,26 @@ namespace DigitalBank.Persistence.Services
                 detailsJson: $"{{\"targetUserId\":\"{userId}\",\"role\":\"{role}\"}}");
 
             return ServiceResultVoid.Ok("Rol dəyişdirildi");
+        }
+
+        public async Task<ServiceResult<List<UserLookUpDto>>> SearchUsersByEmailAsync(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email) || email.Length < 3)
+                return ServiceResult<List<UserLookUpDto>>.Ok(new List<UserLookUpDto>());
+
+            var users = await _userManager.Users
+                .AsNoTracking()
+                .Where(u => u.Email.Contains(email))
+                .Take(10)
+                .Select(u => new UserLookUpDto
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    FullName = u.FirstName + " " + u.LastName
+                })
+                .ToListAsync();
+
+            return ServiceResult<List<UserLookUpDto>>.Ok(users);
         }
     }
 }

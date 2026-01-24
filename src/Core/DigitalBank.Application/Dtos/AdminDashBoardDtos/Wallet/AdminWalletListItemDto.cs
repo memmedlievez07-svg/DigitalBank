@@ -11,5 +11,7 @@ namespace DigitalBank.Application.Dtos.AdminDashBoardDtos.Wallet
         public string Currency { get; set; } = null!;
         public WalletStatus Status { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string Email { get; set; }
+        public string UserFullName { get; set; }
     }
 }

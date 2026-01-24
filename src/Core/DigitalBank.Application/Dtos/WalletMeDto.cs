@@ -8,6 +8,7 @@ namespace DigitalBank.Application.Dtos
         public string CardNumber { get; set; } = null!;
         public decimal Balance { get; set; }
         public string Currency { get; set; } = null!;
-        public WalletStatus Status { get; set; }
+        public int Status { get; set; }
+        public List<TransactionDetailDto> Transactions { get; set; } = new();
     }
 }

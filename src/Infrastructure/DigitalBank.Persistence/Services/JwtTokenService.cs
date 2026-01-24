@@ -33,7 +33,7 @@ namespace DigitalBank.Persistence.Services
                 new(ClaimTypes.Name, user.UserName ?? user.Email ?? "")
             };
 
-            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));//rbac
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

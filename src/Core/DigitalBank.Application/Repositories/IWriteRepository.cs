@@ -8,7 +8,9 @@ namespace DigitalBank.Application.Repositories
         Task AddRangeAsync(IEnumerable<T> entities, CancellationToken ct = default);
         void Update(T entity);
         void Remove(T entity);
-       
+        void UpdateRange(List<T> entities);
+
+
     }
 }
 

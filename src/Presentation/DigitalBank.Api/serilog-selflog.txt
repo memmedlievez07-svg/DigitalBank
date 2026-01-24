@@ -112,3 +112,563 @@ Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmen
 Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
 Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
 Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T12:46:07.0645503Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T12:46:07.0705174Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T12:59:59.0773356Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T12:59:59.0811786Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T16:30:02.3849949Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T16:30:02.3905825Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T17:10:24.1324496Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T17:10:24.1375269Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T19:43:19.5559751Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T19:43:19.6542159Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T21:58:16.3396018Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T21:58:16.3439117Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T22:59:01.8607886Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T22:59:01.8654079Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T23:45:48.3515231Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-18T23:45:48.3558273Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:01:25.9040008Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:01:25.9082671Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:12:35.1551024Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:12:35.1596260Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:18:21.9150005Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:18:21.9204476Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:27:51.3142630Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:27:51.3184715Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:29:37.1546571Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T00:29:37.1594491Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T05:04:11.4628467Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T05:04:11.4671686Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T05:10:35.8363168Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T05:10:35.8417096Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T05:18:34.2018353Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T05:18:34.2072791Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T05:32:50.9517351Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T05:32:50.9592679Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T06:05:19.5073970Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T06:05:19.5118689Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T06:12:21.5344895Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T06:12:21.5386959Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T12:28:31.5828152Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T12:28:31.5889312Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T12:45:09.2961508Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T12:45:09.3003031Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T12:55:47.3020800Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T12:55:47.3060655Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T12:58:10.5668721Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T12:58:10.5711190Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T13:01:05.5580438Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T13:01:05.5638385Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T13:51:18.0082836Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T13:51:18.0129364Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T13:54:10.4299638Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T13:54:10.4339139Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T13:58:50.4461527Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T13:58:50.4524562Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T14:48:05.3886173Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T14:48:05.3941489Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T14:52:06.9039943Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T14:52:06.9080377Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T15:16:17.9476041Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T15:16:17.9514044Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T15:30:51.5232801Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T15:30:51.5286821Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T15:37:31.7986467Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-19T15:37:31.8040888Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:01:29.7045997Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:01:29.7243085Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:09:45.9070326Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:09:45.9121211Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:14:19.1895173Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:14:19.1940562Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:46:03.6244526Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:46:03.6288277Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:47:24.0674018Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T06:47:24.0715644Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T09:01:49.0574744Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T09:01:49.0641840Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T12:40:01.4283685Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-20T12:40:01.4331067Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T06:40:04.6517505Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T06:40:04.6570330Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T16:02:27.0605176Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T16:02:27.0644522Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T16:58:43.6018063Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T16:58:43.6071389Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T17:11:34.5526234Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T17:11:34.5566873Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T17:46:13.0302325Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T17:46:13.0350870Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T20:23:36.8142425Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T20:23:36.8254365Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T20:39:23.6786539Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T20:39:23.6826459Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T20:45:18.0965175Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T20:45:18.1024842Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T20:50:07.1668491Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T20:50:07.1728811Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T22:35:04.4399173Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-21T22:35:04.4441706Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T06:19:35.1517832Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T06:19:35.1575505Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T16:40:14.6777172Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T16:40:14.6825607Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T19:18:03.8620971Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T19:18:03.8689189Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T19:33:52.1910449Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T19:33:52.1958774Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T20:00:54.4821201Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-22T20:00:54.4861093Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-23T02:40:00.5162522Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-23T02:40:00.5222894Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-23T03:42:13.2944013Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-23T03:42:13.2989682Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-23T16:16:55.5101187Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-23T16:16:55.5144203Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:22:09.5670747Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:22:09.5722873Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:35:29.7711709Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:35:29.7758472Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:41:26.0737995Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:41:26.0783099Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:47:43.4997904Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:47:43.5037061Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:50:27.7008264Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T12:50:27.7060788Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T13:16:33.8054539Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T13:16:33.8106683Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T13:57:22.8507954Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T13:57:22.8555955Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:12:20.4486361Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:12:20.4525634Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:13:10.7455606Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:13:10.7500463Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:13:40.0464104Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:13:40.0503211Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:14:02.2535503Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:14:02.2723156Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:15:01.2378073Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:15:01.2464758Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:15:35.8199727Z Unable to find a method called WithMachineName. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)
+2026-01-24T14:15:35.8253586Z Unable to find a method called WithThreadId. Candidate methods are:
+Serilog.LoggerConfiguration With(Serilog.Configuration.LoggerEnrichmentConfiguration, Serilog.Core.ILogEventEnricher)
+Serilog.LoggerConfiguration AtLevel(Serilog.Configuration.LoggerEnrichmentConfiguration, System.Action`1[Serilog.Configuration.LoggerEnrichmentConfiguration], Serilog.Events.LogEventLevel, Serilog.Core.LoggingLevelSwitch)
+Serilog.LoggerConfiguration FromLogContext(Serilog.Configuration.LoggerEnrichmentConfiguration)

@@ -9,5 +9,6 @@ namespace DigitalBank.Application.Interfaces
         Task<ServiceResult<ProfileResponseDto>> GetMyProfileAsync();
         Task<ServiceResultVoid> UpdateMyProfileAsync(ProfileUpdateRequestDto dto);
         Task<ServiceResult<AvatarUploadResponseDto>> UploadAvatarAsync(IFormFile file, CancellationToken ct = default);
+        Task<ServiceResult<List<UserBriefDto>>> SearchUsersAsync(string query);
     }
 }

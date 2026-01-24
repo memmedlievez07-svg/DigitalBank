@@ -4,5 +4,7 @@
     {
         Task PushToUserAsync(string userId, object payload);
         Task PushUnreadCountChangedAsync(string userId);
+        Task PushToAllAsync(object payload);
+
     }
 }

@@ -51,7 +51,8 @@ namespace DigitalBank.Persistence.Services
                     Balance = w.Balance,
                     Currency = w.Currency,
                     Status = w.Status,
-                    CreatedDate = w.CreatedDate
+                    CreatedDate = w.CreatedDate,
+                    UserFullName = w.User.FirstName + " " + w.User.LastName,
                 })
                 .ToListAsync();
 

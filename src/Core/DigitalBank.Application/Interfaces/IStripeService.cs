@@ -7,7 +7,7 @@ namespace DigitalBank.Application.Interfaces
         /// <summary>
         /// Stripe Checkout Session yaradır və URL qaytarır
         /// </summary>
-        Task<ServiceResult<string>> CreateCheckoutSessionAsync(decimal amount, string currency = "azn");
+        Task<ServiceResult<object>> CreateCheckoutSessionAsync(decimal amount, string currency = "azn");
 
         /// <summary>
         /// Webhook-dən gələn event-i işləyir (ödəniş uğurlu olanda balans artırır)

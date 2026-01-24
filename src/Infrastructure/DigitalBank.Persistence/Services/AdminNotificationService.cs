@@ -27,12 +27,10 @@ namespace DigitalBank.Persistence.Services
 
         public async Task<ServiceResultVoid> SendToAllAsync(AdminSendNotificationDto dto)
         {
-            var userIds = await _userManager.Users
-                .AsNoTracking()
-                .Select(u => u.Id)
-                .ToListAsync();
+            // 1. DB-yə qeyd etmə prosesini performansı artırmaq üçün fon işinə (Background Job) ata bilərsən
+            // Amma hələlik batch insert edirik:
+            var userIds = await _userManager.Users.Select(u => u.Id).ToListAsync();
 
-            // çox user varsa AddRangeAsync istifadə et
             var notifications = userIds.Select(uid => new Notification
             {
                 UserId = uid,
@@ -40,26 +38,22 @@ namespace DigitalBank.Persistence.Services
                 Body = dto.Body,
                 Type = dto.Type,
                 IsRead = false,
-                RelatedTransactionId = dto.RelatedTransactionId
+                CreatedDate = DateTime.UtcNow
             }).ToList();
 
             await _uow.NotificationWriteRepository.AddRangeAsync(notifications);
             await _uow.CommitAsync();
 
-            // 🔔 real-time push (DB uğurlu olandan sonra)
-            foreach (var uid in userIds)
+            // 2. Real-time hissəsi: foreach YERİNƏ Clients.All istifadə edirik (SignalR Hub-da)
+            // Bu, serverin yükünü 10,000-dən 1-ə endirir.
+            await _push.PushToAllAsync(new
             {
-                await _push.PushToUserAsync(uid, new
-                {
-                    title = dto.Title,
-                    body = dto.Body,
-                    type = (int)dto.Type
-                });
+                title = dto.Title,
+                body = dto.Body,
+                type = (int)dto.Type
+            });
 
-                await _push.PushUnreadCountChangedAsync(uid);
-            }
-
-            return ServiceResultVoid.Ok("Broadcast sent");
+            return ServiceResultVoid.Ok("Broadcast sent successfully");
         }
 
         public async Task<ServiceResultVoid> SendToUserAsync(AdminSendToUserDto dto)

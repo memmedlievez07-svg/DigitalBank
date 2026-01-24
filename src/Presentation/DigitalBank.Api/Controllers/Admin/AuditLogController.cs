@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalBank.Api.Controllers.Admin
 {
+    [ApiController]
     [Authorize(Roles = "Admin")]
     [Route("api/admin/audit-logs")]
     public class AuditLogsController : ApiControllerBase

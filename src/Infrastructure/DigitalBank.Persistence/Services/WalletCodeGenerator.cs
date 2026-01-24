@@ -16,7 +16,7 @@ namespace DigitalBank.Persistence.Services
 
         public async Task<string> GenerateUniqueCardNumberAsync()
         {
-            while (true)
+            while (true) //TODO while true ???
             {
                 var number = Generate16Digits();
 
